@@ -1,26 +1,50 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs').promises;
 const path = require('path');
+const fs = require('fs').promises;
 const moment = require('moment');
+const db = require('../db');
 
-const DATA_FILE = path.join(__dirname, '../data/services.json');
-const HISTORY_FILE = path.join(__dirname, '../data/history.json');
 const REPORTS_DIR = path.join(__dirname, '../reports');
+
+async function getAllHistory() {
+  const { rows } = await db.query('SELECT * FROM history ORDER BY timestamp ASC');
+  return rows.map(r => ({
+    timestamp: r.timestamp,
+    category: r.category,
+    serviceId: r.service_id,
+    status: r.status,
+    problemStatement: r.problem_statement,
+    type: r.type,
+    duration: r.duration,
+    resolvedBy: r.resolved_by,
+    previousStatus: r.previous_status
+  }));
+}
+
+async function getAllServices() {
+  const { rows } = await db.query('SELECT * FROM services ORDER BY category, name');
+  const services = {};
+  rows.forEach(row => {
+    if (!services[row.category]) services[row.category] = [];
+    services[row.category].push({
+      id: row.id, name: row.name, icon: row.icon, status: row.status,
+      responseTime: row.response_time, problemStatement: row.problem_statement,
+      lastUpdated: row.last_updated, category: row.category
+    });
+  });
+  return services;
+}
 
 // Generate uptime report
 router.get('/uptime/:period?', async (req, res) => {
   try {
     const period = req.params.period || 'weekly';
-    const data = await fs.readFile(HISTORY_FILE, 'utf8');
-    const history = JSON.parse(data);
-    
-    const uptimeData = calculateUptime(history, period);
-    
+    const history = await getAllHistory();
     res.json({
       period,
       generated: new Date().toISOString(),
-      data: uptimeData
+      data: calculateUptime(history, period)
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to generate uptime report' });
@@ -31,16 +55,12 @@ router.get('/uptime/:period?', async (req, res) => {
 router.get('/sla/:period?', async (req, res) => {
   try {
     const period = req.params.period || 'monthly';
-    const data = await fs.readFile(HISTORY_FILE, 'utf8');
-    const history = JSON.parse(data);
-    
-    const slaData = calculateSLA(history, period);
-    
+    const history = await getAllHistory();
     res.json({
       period,
       generated: new Date().toISOString(),
-      slaTarget: 99.9, // 99.9% uptime target
-      data: slaData
+      slaTarget: 99.9,
+      data: calculateSLA(history, period)
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to generate SLA report' });
@@ -51,11 +71,8 @@ router.get('/sla/:period?', async (req, res) => {
 router.get('/incidents/:period?', async (req, res) => {
   try {
     const period = req.params.period || 'monthly';
-    const data = await fs.readFile(HISTORY_FILE, 'utf8');
-    const history = JSON.parse(data);
-    
+    const history = await getAllHistory();
     const incidents = extractIncidents(history, period);
-    
     res.json({
       period,
       generated: new Date().toISOString(),
@@ -71,17 +88,8 @@ router.get('/incidents/:period?', async (req, res) => {
 router.get('/dashboard/:period?', async (req, res) => {
   try {
     const period = req.params.period || 'daily';
-    
-    // Get current status
-    const servicesData = await fs.readFile(DATA_FILE, 'utf8');
-    const services = JSON.parse(servicesData);
-    
-    // Get historical data
-    const historyData = await fs.readFile(HISTORY_FILE, 'utf8');
-    const history = JSON.parse(historyData);
-    
-    // Generate comprehensive report
-    const report = {
+    const [services, history] = await Promise.all([getAllServices(), getAllHistory()]);
+    res.json({
       generated: new Date().toISOString(),
       period,
       summary: generateServiceSummary(services),
@@ -89,9 +97,7 @@ router.get('/dashboard/:period?', async (req, res) => {
       incidents: extractIncidents(history, period),
       trends: calculateTrends(history, period),
       recommendations: generateRecommendations(services, history)
-    };
-    
-    res.json(report);
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to generate dashboard report' });
   }

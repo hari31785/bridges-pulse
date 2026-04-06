@@ -1,25 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const fs = require('fs').promises;
-const path = require('path');
-
-const DATA_FILE = path.join(__dirname, '../data/services.json');
-const HISTORY_FILE = path.join(__dirname, '../data/history.json');
+const db = require('../db');
 
 // Get all services with current status
 router.get('/', async (req, res) => {
   try {
-    const data = await fs.readFile(DATA_FILE, 'utf8');
-    const services = JSON.parse(data);
-    
-    // Add timestamp
-    const response = {
+    const { rows } = await db.query('SELECT * FROM services ORDER BY category, name');
+    const services = groupByCategory(rows);
+    res.json({
       timestamp: new Date().toISOString(),
       services,
       summary: generateSummary(services)
-    };
-    
-    res.json(response);
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load services data' });
   }
@@ -28,19 +20,19 @@ router.get('/', async (req, res) => {
 // Get service by category
 router.get('/category/:category', async (req, res) => {
   try {
-    const data = await fs.readFile(DATA_FILE, 'utf8');
-    const services = JSON.parse(data);
-    const category = req.params.category;
-    
-    if (services[category]) {
-      res.json({
-        category,
-        services: services[category],
-        timestamp: new Date().toISOString()
-      });
-    } else {
-      res.status(404).json({ error: 'Category not found' });
+    const { category } = req.params;
+    const { rows } = await db.query(
+      'SELECT * FROM services WHERE category = $1 ORDER BY name',
+      [category]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Category not found' });
     }
+    res.json({
+      category,
+      services: rows.map(rowToService),
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to load category data' });
   }
@@ -50,14 +42,14 @@ router.get('/category/:category', async (req, res) => {
 router.get('/history/:timeRange?', async (req, res) => {
   try {
     const timeRange = req.params.timeRange || '24h';
-    const data = await fs.readFile(HISTORY_FILE, 'utf8');
-    const history = JSON.parse(data);
-    
-    const filtered = filterByTimeRange(history, timeRange);
-    
+    const cutoff = getCutoff(timeRange);
+    const { rows } = await db.query(
+      'SELECT * FROM history WHERE timestamp >= $1 ORDER BY timestamp DESC',
+      [cutoff]
+    );
     res.json({
       timeRange,
-      data: filtered,
+      data: rows.map(rowToHistory),
       timestamp: new Date().toISOString()
     });
   } catch (error) {
@@ -69,35 +61,51 @@ router.get('/history/:timeRange?', async (req, res) => {
 router.patch('/:category/:serviceId/status', async (req, res) => {
   try {
     const { category, serviceId } = req.params;
-    const { status, problemStatement, responseTime, owner } = req.body;
+    const { status, problemStatement, responseTime } = req.body;
 
     const allowedStatuses = ['Operational', 'Average', 'Poor', 'Running Normally', 'Down', 'Degraded', 'Maintenance', 'Unknown'];
     if (status !== undefined && !allowedStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status value' });
     }
 
-    const data = await fs.readFile(DATA_FILE, 'utf8');
-    const services = JSON.parse(data);
-
-    if (!services[category]) {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
-    const serviceIndex = services[category].findIndex(s => s.id === serviceId);
-    if (serviceIndex === -1) {
+    const { rows: existing } = await db.query(
+      'SELECT * FROM services WHERE id = $1 AND category = $2',
+      [serviceId, category]
+    );
+    if (existing.length === 0) {
       return res.status(404).json({ error: 'Service not found' });
     }
 
-    const service = services[category][serviceIndex];
+    const now = new Date().toISOString();
+    const setClauses = [];
+    const values = [];
+    let idx = 1;
 
-    if (status !== undefined) service.status = status;
-    if (problemStatement !== undefined) service.problemStatement = problemStatement.slice(0, 500);
-    if (responseTime !== undefined) service.responseTime = responseTime.slice(0, 20);
-    if (owner !== undefined) service.owner = owner.slice(0, 100);
-    service.lastUpdated = new Date().toISOString();
+    if (status !== undefined) { setClauses.push(`status = $${idx++}`); values.push(status); }
+    if (problemStatement !== undefined) { setClauses.push(`problem_statement = $${idx++}`); values.push(problemStatement.slice(0, 500)); }
+    if (responseTime !== undefined) { setClauses.push(`response_time = $${idx++}`); values.push(responseTime.slice(0, 20)); }
+    setClauses.push(`last_updated = $${idx++}`);
+    values.push(now);
+    values.push(serviceId);
+    values.push(category);
 
-    await fs.writeFile(DATA_FILE, JSON.stringify(services, null, 2));
-    await logStatusChange(category, serviceId, service.status, service.problemStatement);
+    const { rows } = await db.query(
+      `UPDATE services SET ${setClauses.join(', ')} WHERE id = $${idx} AND category = $${idx + 1} RETURNING *`,
+      values
+    );
+
+    const service = rowToService(rows[0]);
+
+    await db.query(
+      `INSERT INTO history (timestamp, category, service_id, status, problem_statement, type)
+       VALUES ($1, $2, $3, $4, $5, 'status_change')`,
+      [now, category, serviceId, service.status, service.problemStatement || '']
+    );
+
+    // Keep only last 1000 history entries
+    await db.query(
+      `DELETE FROM history WHERE id IN (SELECT id FROM history ORDER BY timestamp DESC OFFSET 1000)`
+    );
 
     res.json({ success: true, service });
   } catch (error) {
@@ -106,23 +114,65 @@ router.patch('/:category/:serviceId/status', async (req, res) => {
 });
 
 // Helper functions
-function generateSummary(services) {
-  const summary = {
-    total: 0,
-    operational: 0,
-    issues: 0,
-    critical: 0,
-    categories: {}
+function groupByCategory(rows) {
+  const services = {};
+  rows.forEach(row => {
+    if (!services[row.category]) services[row.category] = [];
+    services[row.category].push(rowToService(row));
+  });
+  return services;
+}
+
+function rowToService(row) {
+  return {
+    id: row.id,
+    name: row.name,
+    icon: row.icon,
+    status: row.status,
+    responseTime: row.response_time,
+    problemStatement: row.problem_statement,
+    lastUpdated: row.last_updated,
+    category: row.category
   };
-  
+}
+
+function rowToHistory(row) {
+  return {
+    id: row.id,
+    timestamp: row.timestamp,
+    category: row.category,
+    serviceId: row.service_id,
+    status: row.status,
+    problemStatement: row.problem_statement,
+    type: row.type,
+    duration: row.duration,
+    resolvedBy: row.resolved_by,
+    previousStatus: row.previous_status
+  };
+}
+
+function getCutoff(timeRange) {
+  const now = new Date();
+  switch (timeRange) {
+    case '1h':  return new Date(now - 60 * 60 * 1000);
+    case '24h': return new Date(now - 24 * 60 * 60 * 1000);
+    case '7d':  return new Date(now - 7 * 24 * 60 * 60 * 1000);
+    case '30d': return new Date(now - 30 * 24 * 60 * 60 * 1000);
+    default:    return new Date(now - 24 * 60 * 60 * 1000);
+  }
+}
+
+function generateSummary(services) {
+  const summary = { total: 0, operational: 0, issues: 0, critical: 0, categories: {} };
+
   Object.entries(services).forEach(([category, items]) => {
     summary.categories[category] = { total: items.length, healthy: 0, issues: 0 };
-    
+
     items.forEach(item => {
       summary.total++;
       const status = item.status.toLowerCase();
       const hasProblem = item.problemStatement && item.problemStatement.trim();
-      
+
       if (status.includes('poor') || status.includes('error') || status.includes('critical') || status.includes('down')) {
         summary.critical++;
         summary.categories[category].issues++;
@@ -135,57 +185,8 @@ function generateSummary(services) {
       }
     });
   });
-  
+
   return summary;
-}
-
-function filterByTimeRange(history, timeRange) {
-  const now = new Date();
-  let cutoff;
-  
-  switch (timeRange) {
-    case '1h':
-      cutoff = new Date(now.getTime() - 60 * 60 * 1000);
-      break;
-    case '24h':
-      cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-      break;
-    case '7d':
-      cutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      break;
-    case '30d':
-      cutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      break;
-    default:
-      cutoff = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  }
-  
-  return history.filter(entry => new Date(entry.timestamp) >= cutoff);
-}
-
-async function logStatusChange(category, serviceId, status, problemStatement) {
-  try {
-    const historyData = await fs.readFile(HISTORY_FILE, 'utf8');
-    const history = JSON.parse(historyData);
-    
-    history.push({
-      timestamp: new Date().toISOString(),
-      category,
-      serviceId,
-      status,
-      problemStatement: problemStatement || '',
-      type: 'status_change'
-    });
-    
-    // Keep only last 1000 entries
-    if (history.length > 1000) {
-      history.splice(0, history.length - 1000);
-    }
-    
-    await fs.writeFile(HISTORY_FILE, JSON.stringify(history, null, 2));
-  } catch (error) {
-    console.error('Failed to log status change:', error);
-  }
 }
 
 module.exports = router;

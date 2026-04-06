@@ -9,6 +9,7 @@ const servicesRouter = require('./routes/services');
 const reportsRouter = require('./routes/reports');
 const configRouter = require('./routes/config');
 const opsRouter = require('./routes/ops');
+const initDB = require('./db-init');
 
 // Logger setup
 const logger = winston.createLogger({
@@ -78,7 +79,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  try {
+    await initDB();
+  } catch (err) {
+    logger.error('Database initialization failed:', err.message);
+  }
   logger.info(`🚀 Bridges Pulse server running on http://localhost:${PORT}`);
   logger.info('📊 Dashboard: http://localhost:' + PORT);
   logger.info('🔧 API: http://localhost:' + PORT + '/api');
