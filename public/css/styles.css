@@ -867,6 +867,56 @@ body {
   color: var(--accent);
 }
 
+/* Export dropdown */
+.export-dropdown-wrapper {
+  position: relative;
+}
+
+.export-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  min-width: 180px;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.export-dropdown.open {
+  display: block;
+}
+
+.export-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.export-option svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  stroke: var(--text-secondary);
+}
+
+.export-option:hover {
+  background: var(--bg-tertiary);
+  color: var(--accent);
+}
+
 /* Logo inline SVG sizing */
 .logo-icon .logo-svg {
   width: 48px;

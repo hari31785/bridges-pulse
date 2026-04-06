@@ -36,7 +36,32 @@ class Modals {
 
         if (settingsBtn) settingsBtn.addEventListener('click', () => this.showSettings());
         if (reportsBtn) reportsBtn.addEventListener('click', () => this.showReports());
-        if (exportBtn) exportBtn.addEventListener('click', () => this.exportDashboard());
+
+        // Export dropdown
+        const exportBtn = document.getElementById('export-btn');
+        const exportDropdown = document.getElementById('export-dropdown');
+        if (exportBtn && exportDropdown) {
+            exportBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                exportDropdown.classList.toggle('open');
+                if (window.feather) feather.replace();
+            });
+            document.addEventListener('click', () => exportDropdown.classList.remove('open'));
+            exportDropdown.addEventListener('click', (e) => e.stopPropagation());
+        }
+
+        document.getElementById('export-json')?.addEventListener('click', () => {
+            exportDropdown.classList.remove('open');
+            this.exportAsJSON();
+        });
+        document.getElementById('export-pdf')?.addEventListener('click', () => {
+            exportDropdown.classList.remove('open');
+            this.exportAsPDF();
+        });
+        document.getElementById('export-image')?.addEventListener('click', () => {
+            exportDropdown.classList.remove('open');
+            this.exportAsImage();
+        });
     }
 
     openModal(modalId) {
@@ -541,15 +566,53 @@ class Modals {
 
     // ── Export Dashboard ───────────────────────────────────────────────────
 
-    async exportDashboard() {
+    async exportAsJSON() {
         try {
             Components.createToast('Preparing export...', 'info', 2000);
             const report = await window.api.getDashboardReport('daily');
             const filename = `bridges-pulse-export-${new Date().toISOString().slice(0, 10)}.json`;
             Utils.downloadFile(report, filename);
-            Components.createToast(`Dashboard exported as ${filename}`, 'success');
+            Components.createToast(`Exported as ${filename}`, 'success');
         } catch (error) {
             Components.createToast('Export failed. Please try again.', 'error');
+        }
+    }
+
+    exportAsPDF() {
+        const style = document.createElement('style');
+        style.id = 'print-override';
+        style.textContent = `
+            @media print {
+                .header-actions, .filters-bar, #modal-overlay { display: none !important; }
+                .main-content { padding: 0 !important; }
+                body { background: white !important; }
+            }
+        `;
+        document.head.appendChild(style);
+        window.print();
+        setTimeout(() => document.getElementById('print-override')?.remove(), 1000);
+    }
+
+    async exportAsImage() {
+        if (!window.html2canvas) {
+            Components.createToast('Image export library not loaded. Please refresh.', 'error');
+            return;
+        }
+        Components.createToast('Capturing dashboard...', 'info', 3000);
+        try {
+            const target = document.querySelector('.main-content') || document.body;
+            const canvas = await html2canvas(target, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-primary').trim() || '#ffffff'
+            });
+            const link = document.createElement('a');
+            link.download = `bridges-pulse-${new Date().toISOString().slice(0, 10)}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            Components.createToast('Image downloaded', 'success');
+        } catch (error) {
+            Components.createToast('Image export failed. Please try again.', 'error');
         }
     }
 

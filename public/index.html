@@ -118,10 +118,23 @@
                             <i data-feather="settings"></i>
                             <span>Settings</span>
                         </button>
-                        <button id="export-btn" class="nav-item" role="menuitem" title="Export dashboard">
-                            <i data-feather="download"></i>
-                            <span>Export</span>
-                        </button>
+                        <div class="export-dropdown-wrapper">
+                            <button id="export-btn" class="nav-item" role="menuitem" title="Export dashboard">
+                                <i data-feather="download"></i>
+                                <span>Export</span>
+                            </button>
+                            <div id="export-dropdown" class="export-dropdown" role="menu" aria-label="Export options">
+                                <button class="export-option" id="export-json">
+                                    <i data-feather="file-text"></i> Export as JSON
+                                </button>
+                                <button class="export-option" id="export-pdf">
+                                    <i data-feather="file"></i> Export as PDF
+                                </button>
+                                <button class="export-option" id="export-image">
+                                    <i data-feather="image"></i> Export as Image
+                                </button>
+                            </div>
+                        </div>
                         <div class="nav-divider"></div>
                         <a href="/ops" class="nav-item nav-item-devops" role="menuitem" title="DevOps Portal">
                             <i data-feather="tool"></i>
@@ -246,6 +259,7 @@
     
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/api.js"></script>
     <script src="js/components.js"></script>
