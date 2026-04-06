@@ -12,19 +12,15 @@ const opsRouter = require('./routes/ops');
 const initDB = require('./db-init');
 
 // Logger setup
+const logTransports = [new winston.transports.Console({ format: winston.format.simple() })];
+if (process.env.NODE_ENV !== 'production') {
+  logTransports.push(new winston.transports.File({ filename: 'logs/error.log', level: 'error' }));
+  logTransports.push(new winston.transports.File({ filename: 'logs/combined.log' }));
+}
 const logger = winston.createLogger({
   level: 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' }),
-    new winston.transports.Console({
-      format: winston.format.simple()
-    })
-  ]
+  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
+  transports: logTransports
 });
 
 const app = express();
@@ -49,6 +45,20 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
 // API Routes
+// On Vercel, initialize DB lazily on first request
+let dbReady = false;
+app.use(async (req, res, next) => {
+  if (!dbReady) {
+    try {
+      await initDB();
+      dbReady = true;
+    } catch (err) {
+      logger.error('Database initialization failed:', err.message);
+    }
+  }
+  next();
+});
+
 app.use('/api/services', servicesRouter);
 app.use('/api/reports', reportsRouter);
 app.use('/api/config', configRouter);
@@ -79,15 +89,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.listen(PORT, async () => {
-  try {
-    await initDB();
-  } catch (err) {
-    logger.error('Database initialization failed:', err.message);
-  }
-  logger.info(`🚀 Bridges Pulse server running on http://localhost:${PORT}`);
-  logger.info('📊 Dashboard: http://localhost:' + PORT);
-  logger.info('🔧 API: http://localhost:' + PORT + '/api');
-});
+// Initialize DB then start server (skipped on Vercel — initDB called lazily per request)
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, async () => {
+    try {
+      await initDB();
+    } catch (err) {
+      logger.error('Database initialization failed:', err.message);
+    }
+    logger.info(`🚀 Bridges Pulse server running on http://localhost:${PORT}`);
+    logger.info('📊 Dashboard: http://localhost:' + PORT);
+    logger.info('🔧 API: http://localhost:' + PORT + '/api');
+  });
+}
 
 module.exports = app;
