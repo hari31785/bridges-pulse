@@ -57,16 +57,23 @@ class Modals {
             exportDropdown.addEventListener('click', (e) => e.stopPropagation());
         }
 
-        document.getElementById('export-json')?.addEventListener('click', () => {
+        const closeExport = () => {
             exportDropdown.classList.remove('open');
+            const navMenu = document.getElementById('nav-menu');
+            const menuToggle = document.getElementById('menu-toggle');
+            if (navMenu) navMenu.classList.remove('open');
+            if (menuToggle) { menuToggle.classList.remove('open'); menuToggle.setAttribute('aria-expanded', false); }
+        };
+        document.getElementById('export-json')?.addEventListener('click', () => {
+            closeExport();
             this.exportAsJSON();
         });
         document.getElementById('export-pdf')?.addEventListener('click', () => {
-            exportDropdown.classList.remove('open');
+            closeExport();
             this.exportAsPDF();
         });
         document.getElementById('export-image')?.addEventListener('click', () => {
-            exportDropdown.classList.remove('open');
+            closeExport();
             this.exportAsImage();
         });
     }

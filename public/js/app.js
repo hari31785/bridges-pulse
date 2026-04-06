@@ -49,7 +49,7 @@ class AppManager {
                         this.closeMenu();
                     }
                 });
-                navMenu.querySelectorAll('button.nav-item').forEach(btn => {
+                navMenu.querySelectorAll('button.nav-item:not(#export-btn)').forEach(btn => {
                     btn.addEventListener('click', () => this.closeMenu());
                 });
                 document.addEventListener('keydown', (e) => {
