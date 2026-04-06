@@ -32,7 +32,6 @@ class Modals {
         // Header button wiring
         const settingsBtn = document.getElementById('settings-btn');
         const reportsBtn = document.getElementById('reports-btn');
-        const exportBtn = document.getElementById('export-btn');
 
         if (settingsBtn) settingsBtn.addEventListener('click', () => this.showSettings());
         if (reportsBtn) reportsBtn.addEventListener('click', () => this.showReports());
