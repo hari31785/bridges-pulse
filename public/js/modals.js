@@ -616,21 +616,75 @@ class Modals {
         try {
             const filtersBar = document.getElementById('filters-bar');
             if (filtersBar) filtersBar.style.display = 'none';
-            const target = document.querySelector('.main-content') || document.body;
-            const canvas = await html2canvas(target, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: getComputedStyle(document.body).getPropertyValue('--bg-primary').trim() || '#ffffff'
-            });
+
+            const bgColor = getComputedStyle(document.body).getPropertyValue('--bg-primary').trim() || '#ffffff';
+            const textColor = getComputedStyle(document.body).getPropertyValue('--text-primary').trim() || '#111827';
+            const borderColor = getComputedStyle(document.body).getPropertyValue('--border-primary').trim() || '#e5e7eb';
+            const accentColor = '#3b82f6';
+            const exportTime = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+            // Build export header
+            const header = document.createElement('div');
+            header.style.cssText = `
+                position:fixed; left:-9999px; top:0;
+                width:${document.querySelector('.main-content')?.offsetWidth || 1200}px;
+                padding:20px 28px; display:flex; align-items:center; justify-content:space-between;
+                background:${bgColor}; border-bottom:2px solid ${borderColor}; box-sizing:border-box;
+                font-family:'Inter',sans-serif;
+            `;
+            header.innerHTML = `
+                <div style="display:flex;align-items:center;gap:14px;">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:40px;height:40px;border-radius:10px;">
+                        <rect width="48" height="48" rx="12" fill="url(#expLogoGrad)"/>
+                        <polyline points="4,24 10,24 14,14 18,34 22,20 26,28 30,24 34,24 38,18 42,24 44,24"
+                                  stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <defs>
+                            <linearGradient id="expLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#3b82f6"/>
+                                <stop offset="100%" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div>
+                        <div style="font-size:1.2rem;font-weight:700;color:${textColor};line-height:1.2;">Bridges Pulse</div>
+                        <div style="font-size:0.75rem;color:#6b7280;letter-spacing:0.03em;">Advanced Health Monitoring</div>
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:0.7rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Exported</div>
+                    <div style="font-size:0.85rem;font-weight:600;color:${textColor};">${exportTime}</div>
+                </div>
+            `;
+            document.body.appendChild(header);
+
+            const [headerCanvas, bodyCanvas] = await Promise.all([
+                html2canvas(header, { scale: 2, useCORS: true, backgroundColor: bgColor }),
+                html2canvas(document.querySelector('.main-content') || document.body, { scale: 2, useCORS: true, backgroundColor: bgColor })
+            ]);
+
+            document.body.removeChild(header);
+
+            // Merge into one canvas: header on top, body below
+            const merged = document.createElement('canvas');
+            merged.width = Math.max(headerCanvas.width, bodyCanvas.width);
+            merged.height = headerCanvas.height + bodyCanvas.height;
+            const ctx = merged.getContext('2d');
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, merged.width, merged.height);
+            ctx.drawImage(headerCanvas, 0, 0);
+            ctx.drawImage(bodyCanvas, 0, headerCanvas.height);
+
             const link = document.createElement('a');
             link.download = `bridges-pulse-${new Date().toISOString().slice(0, 10)}.png`;
-            link.href = canvas.toDataURL('image/png');
+            link.href = merged.toDataURL('image/png');
             link.click();
             if (filtersBar) filtersBar.style.display = '';
             Components.createToast('Image downloaded', 'success');
         } catch (error) {
             const filtersBar = document.getElementById('filters-bar');
             if (filtersBar) filtersBar.style.display = '';
+            // Clean up orphaned header if capture failed mid-way
+            document.querySelectorAll('body > div[style*="left:-9999px"]').forEach(el => el.remove());
             Components.createToast('Image export failed. Please try again.', 'error');
         }
     }
