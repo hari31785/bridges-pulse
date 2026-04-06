@@ -53,7 +53,8 @@ app.use(async (req, res, next) => {
       await initDB();
       dbReady = true;
     } catch (err) {
-      logger.error('Database initialization failed:', err.message);
+      logger.error(`Database initialization failed: ${err.message}\n${err.stack}`);
+      return res.status(503).json({ error: `Database unavailable: ${err.message}` });
     }
   }
   next();
