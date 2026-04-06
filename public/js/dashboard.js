@@ -449,8 +449,8 @@ class Dashboard {
             // Split large categories into two columns (threshold: 15 items)
             const chunks = services.length > 15
                 ? [
-                    { label: `${title} 1`, items: services.slice(0, Math.ceil(services.length / 2)) },
-                    { label: `${title} 2`, items: services.slice(Math.ceil(services.length / 2)) }
+                    { label: title, items: services.slice(0, Math.ceil(services.length / 2)) },
+                    { label: `${title} (Contd.)`, items: services.slice(Math.ceil(services.length / 2)) }
                   ]
                 : [{ label: title, items: services }];
 
