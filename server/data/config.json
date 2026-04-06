@@ -1,0 +1,113 @@
+{
+  "theme": "light",
+  "refreshInterval": 30000,
+  "layout": "grid",
+  "notifications": {
+    "enabled": true,
+    "emailAlerts": false,
+    "pushNotifications": true,
+    "sound": true
+  },
+  "dashboard": {
+    "title": "Bridges Pulse",
+    "subtitle": "Advanced Health Monitoring Dashboard",
+    "showTimestamp": true,
+    "showSummary": true,
+    "showMetrics": true,
+    "compactMode": false
+  },
+  "categories": {
+    "application": {
+      "visible": true,
+      "order": 1,
+      "color": "#3b82f6",
+      "icon": "layers",
+      "title": "Application Layer",
+      "expanded": false
+    },
+    "database": {
+      "visible": true,
+      "order": 2,
+      "color": "#10b981",
+      "icon": "database",
+      "title": "Database Systems",
+      "expanded": false
+    },
+    "integrations": {
+      "visible": true,
+      "order": 3,
+      "color": "#f59e0b",
+      "icon": "link",
+      "title": "External Integrations",
+      "expanded": false
+    },
+    "functionalities": {
+      "visible": true,
+      "order": 4,
+      "color": "#8b5cf6",
+      "icon": "settings",
+      "title": "Business Functions",
+      "expanded": false
+    },
+    "services": {
+      "visible": true,
+      "order": 5,
+      "color": "#06b6d4",
+      "icon": "cpu",
+      "title": "Micro-Services",
+      "expanded": false
+    }
+  },
+  "reports": {
+    "autoGenerate": true,
+    "schedule": "daily",
+    "includeSLA": true,
+    "includeIncidents": true,
+    "includeMetrics": true,
+    "reportFormat": "json",
+    "emailReports": false,
+    "retentionDays": 90
+  },
+  "alerts": {
+    "thresholds": {
+      "responseTime": {
+        "warning": 1000,
+        "critical": 3000
+      },
+      "availability": {
+        "warning": 98,
+        "critical": 95
+      }
+    },
+    "escalation": {
+      "enabled": false,
+      "levels": [
+        {
+          "delay": 300,
+          "contacts": [
+            "team-lead@company.com"
+          ]
+        },
+        {
+          "delay": 900,
+          "contacts": [
+            "manager@company.com"
+          ]
+        }
+      ]
+    }
+  },
+  "ui": {
+    "animation": true,
+    "soundEffects": false,
+    "highContrast": false,
+    "fontSize": "medium",
+    "displayDensity": "normal"
+  },
+  "performance": {
+    "enableCaching": true,
+    "cacheTimeout": 60000,
+    "maxHistoryPoints": 100,
+    "enableCompression": true
+  }
+}

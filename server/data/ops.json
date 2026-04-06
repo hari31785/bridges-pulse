@@ -1,0 +1,9 @@
+{
+  "broadcast": {
+    "message": "",
+    "severity": "info",
+    "active": false,
+    "createdAt": null,
+    "updatedBy": ""
+  }
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridges Pulse — Ops Control Panel</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.css">
+
+    <!-- Shared styles + Ops-specific styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/ops.css">
+</head>
+<body class="theme-light">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i data-feather="tool"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Ops Control Panel</h1>
+                    <p>Bridges Pulse — Developer Tools</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="header-controls">
+                <a href="/" class="control-btn" title="Back to dashboard">
+                    <i data-feather="monitor"></i>
+                    <span>Dashboard</span>
+                </a>
+                <button id="theme-toggle" class="control-btn" title="Toggle theme">
+                    <i data-feather="sun" id="theme-icon"></i>
+                </button>
+            </div>
+            <div class="timestamp">
+                <i data-feather="clock"></i>
+                <span id="current-time"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="ops-main">
+
+        <!-- Services Editor Section -->
+        <section class="ops-section" id="services-section">
+            <div class="ops-section-header">
+                <div class="ops-section-title">
+                    <i data-feather="sliders"></i>
+                    <h2>Service Status</h2>
+                </div>
+                <p class="ops-section-desc">Update the status, response time, and notes for any service. Changes appear immediately on the dashboard.</p>
+            </div>
+
+            <!-- Search & Filter -->
+            <div class="ops-toolbar">
+                <div class="ops-search">
+                    <i data-feather="search"></i>
+                    <input type="text" id="ops-search" class="form-control" placeholder="Search services…">
+                </div>
+                <div class="ops-category-tabs" id="ops-category-tabs">
+                    <!-- Category tabs injected by JS -->
+                </div>
+                <div class="ops-save-all">
+                    <span class="unsaved-badge" id="unsaved-badge" style="display:none;"></span>
+                    <button class="btn btn-primary" id="save-all-btn">
+                        <i data-feather="save"></i> Save All Changes
+                    </button>
+                </div>
+            </div>
+
+            <!-- Services Table -->
+            <div class="ops-table-wrapper" id="ops-table-wrapper">
+                <div class="ops-loading">
+                    <i data-feather="loader" class="ops-spin"></i>
+                    <span>Loading services…</span>
+                </div>
+            </div>
+
+            <!-- Save feedback -->
+            <div class="save-feedback" id="save-feedback" style="display:none;"></div>
+        </section>
+
+        <!-- Broadcast Banner Section -->
+        <section class="ops-section" id="broadcast-section">
+            <div class="ops-section-header">
+                <div class="ops-section-title">
+                    <i data-feather="radio"></i>
+                    <h2>Broadcast Message</h2>
+                </div>
+                <p class="ops-section-desc">Post a message that will appear as a banner on the management dashboard.</p>
+            </div>
+
+            <div class="broadcast-editor">
+                <div class="broadcast-current" id="broadcast-current" style="display:none;">
+                    <div class="broadcast-current-label">
+                        <i data-feather="zap"></i> Active broadcast:
+                    </div>
+                    <div class="broadcast-current-message" id="broadcast-current-text"></div>
+                    <button class="btn btn-danger btn-sm" id="clear-broadcast-btn">
+                        <i data-feather="x"></i> Clear
+                    </button>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group form-group-wide">
+                        <label for="broadcast-message">Message</label>
+                        <textarea id="broadcast-message" class="form-control" rows="3"
+                            placeholder="Enter a message for the management team (e.g. Scheduled maintenance tonight at 9PM)..."
+                            maxlength="500"></textarea>
+                        <span class="form-hint"><span id="msg-char-count">0</span> / 500</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="broadcast-severity">Severity</label>
+                        <select id="broadcast-severity" class="form-control">
+                            <option value="info">ℹ️ Info</option>
+                            <option value="warning">⚠️ Warning</option>
+                            <option value="critical">🔴 Critical</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="broadcast-author">Your Name / Team</label>
+                        <input type="text" id="broadcast-author" class="form-control"
+                            placeholder="e.g. Platform Team" maxlength="100">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="post-broadcast-btn">
+                        <i data-feather="send"></i> Post Broadcast
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Toast container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ops.js"></script>
+
+    <script>
+        feather.replace();
+    </script>
+</body>
+</html>
