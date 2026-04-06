@@ -446,17 +446,26 @@ class Dashboard {
             const title = catConfig.title || this.formatCategoryName(category);
             const color = catConfig.color || '#3b82f6';
 
-            const col = document.createElement('div');
-            col.className = 'col-view-column fade-in';
-            col.setAttribute('data-category', category);
+            // Split large categories into two columns (threshold: 15 items)
+            const chunks = services.length > 15
+                ? [
+                    { label: `${title} 1`, items: services.slice(0, Math.ceil(services.length / 2)) },
+                    { label: `${title} 2`, items: services.slice(Math.ceil(services.length / 2)) }
+                  ]
+                : [{ label: title, items: services }];
 
-            col.innerHTML = `
+            chunks.forEach(({ label, items }) => {
+                const col = document.createElement('div');
+                col.className = 'col-view-column fade-in';
+                col.setAttribute('data-category', category);
+
+                col.innerHTML = `
                 <div class="col-view-header" style="border-top: 3px solid ${color}">
-                    <span class="col-view-title">${Utils.sanitizeHtml(title)}</span>
-                    <span class="col-view-count">${services.length}</span>
+                    <span class="col-view-title">${Utils.sanitizeHtml(label)}</span>
+                    <span class="col-view-count">${items.length}</span>
                 </div>
                 <div class="col-view-body">
-                    ${services.map(s => {
+                    ${items.map(s => {
                         const statusType = Utils.getEffectiveStatusType(s);
                         const dotClass = Utils.getDotClass(s.status);
                         const statusClass = Utils.getStatusClass(s.status);
@@ -477,7 +486,8 @@ class Dashboard {
                 </div>
             `;
 
-            dashboard.appendChild(col);
+                dashboard.appendChild(col);
+            });
         });
 
         if (window.feather) feather.replace();
