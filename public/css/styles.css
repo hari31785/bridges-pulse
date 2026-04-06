@@ -872,17 +872,23 @@ body {
   position: relative;
 }
 
+.export-chevron {
+  margin-left: auto;
+  width: 14px !important;
+  height: 14px !important;
+  stroke: var(--text-secondary);
+  flex-shrink: 0;
+}
+
 .export-dropdown {
   display: none;
-  position: absolute;
-  top: calc(100% + 4px);
-  right: 0;
+  position: fixed;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   min-width: 180px;
-  z-index: 200;
+  z-index: 9999;
   overflow: hidden;
 }
 

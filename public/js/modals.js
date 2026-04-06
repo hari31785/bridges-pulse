@@ -42,8 +42,16 @@ class Modals {
         if (exportBtn && exportDropdown) {
             exportBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                exportDropdown.classList.toggle('open');
-                if (window.feather) feather.replace();
+                const isOpen = exportDropdown.classList.contains('open');
+                exportDropdown.classList.remove('open');
+                if (!isOpen) {
+                    const rect = exportBtn.getBoundingClientRect();
+                    exportDropdown.style.top = (rect.bottom + 4) + 'px';
+                    exportDropdown.style.left = rect.left + 'px';
+                    exportDropdown.style.right = 'auto';
+                    exportDropdown.classList.add('open');
+                    if (window.feather) feather.replace();
+                }
             });
             document.addEventListener('click', () => exportDropdown.classList.remove('open'));
             exportDropdown.addEventListener('click', (e) => e.stopPropagation());
