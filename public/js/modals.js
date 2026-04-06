@@ -607,6 +607,8 @@ class Modals {
         }
         Components.createToast('Capturing dashboard...', 'info', 3000);
         try {
+            const filtersBar = document.getElementById('filters-bar');
+            if (filtersBar) filtersBar.style.display = 'none';
             const target = document.querySelector('.main-content') || document.body;
             const canvas = await html2canvas(target, {
                 scale: 2,
@@ -617,8 +619,11 @@ class Modals {
             link.download = `bridges-pulse-${new Date().toISOString().slice(0, 10)}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
+            if (filtersBar) filtersBar.style.display = '';
             Components.createToast('Image downloaded', 'success');
         } catch (error) {
+            const filtersBar = document.getElementById('filters-bar');
+            if (filtersBar) filtersBar.style.display = '';
             Components.createToast('Image export failed. Please try again.', 'error');
         }
     }
