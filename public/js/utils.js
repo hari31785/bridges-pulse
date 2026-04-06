@@ -96,7 +96,7 @@ const Utils = {
         if (s.includes('warning')) {
             return 'warning';
         }
-        if (s.includes('poor') || s.includes('error') || s.includes('critical')) {
+        if (s.includes('poor') || s.includes('error') || s.includes('critical') || s.includes('down')) {
             return 'critical';
         }
         return 'unknown';
