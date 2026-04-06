@@ -299,6 +299,12 @@ class Dashboard {
         // Columns view — filter rows within each column; all columns always visible unless empty after filter
         if (this.currentView === 'columns') {
             document.querySelectorAll('.col-view-column').forEach((col) => {
+                const colCat = col.dataset.category || '';
+                const matchesCategory = this.currentCategory === 'all' || colCat === this.currentCategory;
+                if (!matchesCategory) {
+                    col.style.display = 'none';
+                    return;
+                }
                 col.style.display = '';
                 col.querySelectorAll('.col-view-row').forEach((row) => {
                     const statusType = row.dataset.statusType;
