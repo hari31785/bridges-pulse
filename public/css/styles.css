@@ -621,9 +621,9 @@ body {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: var(--space-md);
-  overflow-x: auto;
+  overflow-x: hidden;
   padding-bottom: var(--space-md);
 }
 

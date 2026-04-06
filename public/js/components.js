@@ -613,7 +613,8 @@ const componentStyles = `
 ══════════════════════════════════════ */
 
 .col-view-column {
-    flex: 0 0 220px;
+    flex: 1 1 200px;
+    max-width: 280px;
     background: var(--bg-primary);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
