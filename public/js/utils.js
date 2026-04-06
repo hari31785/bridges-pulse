@@ -90,13 +90,13 @@ const Utils = {
      */
     getStatusType(status) {
         const s = (status || '').toLowerCase();
-        if (s.includes('operational') || s === 'ok' || s.includes('running') || s.includes('excellent')) {
+        if (s.includes('operational') || s === 'ok' || s.includes('running') || s.includes('excellent') || s.includes('average')) {
             return 'healthy';
         }
-        if (s.includes('average') || s.includes('warning')) {
+        if (s.includes('warning')) {
             return 'warning';
         }
-        if (s.includes('poor') || s.includes('error') || s.includes('critical') || s.includes('down')) {
+        if (s.includes('poor') || s.includes('error') || s.includes('critical')) {
             return 'critical';
         }
         return 'unknown';

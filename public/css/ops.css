@@ -319,6 +319,7 @@ textarea.form-control {
 .status-select.status-healthy { color: var(--status-operational); }
 .status-select.status-warning { color: var(--status-average); }
 .status-select.status-critical { color: var(--status-poor); }
+.status-select.status-unknown { color: var(--status-na); }
 
 /* ---- State indicators ---- */
 .ops-loading,

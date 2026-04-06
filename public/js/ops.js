@@ -7,6 +7,7 @@ const STATUS_OPTIONS = [
     'Operational',
     'Running Normally',
     'Average',
+    'OK',
     'Degraded',
     'Poor',
     'Maintenance',
