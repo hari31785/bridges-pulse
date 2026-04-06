@@ -44,16 +44,25 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// API Routes
-// On Vercel, initialize DB lazily on first request
+// Health check — no DB needed, always responds
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    version: require('../package.json').version
+  });
+});
+
+// Lazy DB init middleware for all other API routes
 let dbReady = false;
-app.use(async (req, res, next) => {
+app.use('/api', async (req, res, next) => {
   if (!dbReady) {
     try {
       await initDB();
       dbReady = true;
     } catch (err) {
-      logger.error(`Database initialization failed: ${err.message}\n${err.stack}`);
+      console.error(`Database initialization failed: ${err.message}\n${err.stack}`);
       return res.status(503).json({ error: `Database unavailable: ${err.message}` });
     }
   }
@@ -65,17 +74,7 @@ app.use('/api/reports', reportsRouter);
 app.use('/api/config', configRouter);
 app.use('/api/ops', opsRouter);
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'healthy', 
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    version: require('../package.json').version
-  });
-});
-
-// Serve frontend — ops page has its own HTML, all other routes serve index.html
+// Serve frontend
 app.get('/ops', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/ops.html'));
 });
@@ -90,7 +89,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-// Initialize DB then start server (skipped on Vercel — initDB called lazily per request)
+// Start server locally (Vercel handles this itself)
 if (process.env.VERCEL !== '1') {
   app.listen(PORT, async () => {
     try {
