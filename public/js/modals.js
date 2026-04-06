@@ -632,7 +632,7 @@ class Modals {
             header.style.cssText = `
                 position:fixed; left:-9999px; top:0;
                 width:${document.querySelector('.main-content')?.offsetWidth || 1200}px;
-                padding:20px 28px; display:flex; align-items:center; justify-content:space-between;
+                padding:20px 28px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
                 background:${bgColor}; border-bottom:2px solid ${borderColor}; box-sizing:border-box;
                 font-family:'Inter',sans-serif;
             `;
@@ -654,30 +654,28 @@ class Modals {
                         <div style="font-size:0.75rem;color:#6b7280;letter-spacing:0.03em;">Advanced Health Monitoring</div>
                     </div>
                 </div>
-                <div style="display:flex;align-items:center;gap:20px;">
-                    <div style="display:flex;align-items:center;gap:16px;padding:10px 20px;background:${bgColor};border:1px solid ${borderColor};border-radius:10px;">
-                        <div style="display:flex;align-items:center;gap:7px;">
-                            <div style="width:10px;height:10px;border-radius:50%;background:#10b981;flex-shrink:0;"></div>
-                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${healthyCount}</span>
-                            <span style="font-size:0.75rem;color:#6b7280;">Healthy</span>
-                        </div>
-                        <div style="width:1px;height:24px;background:${borderColor};"></div>
-                        <div style="display:flex;align-items:center;gap:7px;">
-                            <div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div>
-                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${warningCount}</span>
-                            <span style="font-size:0.75rem;color:#6b7280;">Warnings</span>
-                        </div>
-                        <div style="width:1px;height:24px;background:${borderColor};"></div>
-                        <div style="display:flex;align-items:center;gap:7px;">
-                            <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
-                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${criticalCount}</span>
-                            <span style="font-size:0.75rem;color:#6b7280;">Critical</span>
-                        </div>
+                <div style="display:flex;align-items:center;gap:16px;padding:10px 20px;background:${bgColor};border:1px solid ${borderColor};border-radius:10px;">
+                    <div style="display:flex;align-items:center;gap:7px;">
+                        <div style="width:10px;height:10px;border-radius:50%;background:#10b981;flex-shrink:0;"></div>
+                        <span style="font-size:1rem;font-weight:700;color:${textColor};">${healthyCount}</span>
+                        <span style="font-size:0.75rem;color:#6b7280;">Healthy</span>
                     </div>
-                    <div style="text-align:right;">
-                        <div style="font-size:0.7rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Exported</div>
-                        <div style="font-size:0.85rem;font-weight:600;color:${textColor};">${exportTime}</div>
+                    <div style="width:1px;height:24px;background:${borderColor};"></div>
+                    <div style="display:flex;align-items:center;gap:7px;">
+                        <div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div>
+                        <span style="font-size:1rem;font-weight:700;color:${textColor};">${warningCount}</span>
+                        <span style="font-size:0.75rem;color:#6b7280;">Warnings</span>
                     </div>
+                    <div style="width:1px;height:24px;background:${borderColor};"></div>
+                    <div style="display:flex;align-items:center;gap:7px;">
+                        <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
+                        <span style="font-size:1rem;font-weight:700;color:${textColor};">${criticalCount}</span>
+                        <span style="font-size:0.75rem;color:#6b7280;">Critical</span>
+                    </div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:0.7rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Exported</div>
+                    <div style="font-size:0.85rem;font-weight:600;color:${textColor};">${exportTime}</div>
                 </div>
             `;
             document.body.appendChild(header);
