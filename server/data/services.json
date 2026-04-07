@@ -195,6 +195,16 @@
       "category": "integrations"
     },
     {
+      "id": "save",
+      "name": "Save",
+      "icon": "save",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-07T00:00:00.000Z",
+      "category": "integrations"
+    },
+    {
       "id": "ibm_mq",
       "name": "IBM MQ",
       "icon": "message-square",
