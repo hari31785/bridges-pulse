@@ -68,4 +68,3 @@ function rowToBroadcast(row) {
 }
 
 module.exports = router;
-module.exports = router;

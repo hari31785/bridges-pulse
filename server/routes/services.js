@@ -63,7 +63,7 @@ router.patch('/:category/:serviceId/status', async (req, res) => {
     const { category, serviceId } = req.params;
     const { status, problemStatement, responseTime } = req.body;
 
-    const allowedStatuses = ['Operational', 'Average', 'Poor', 'Running Normally', 'Down', 'Degraded', 'Maintenance', 'Unknown'];
+    const allowedStatuses = ['Operational', 'OK', 'Average', 'Poor', 'Running Normally', 'Down', 'Degraded', 'Maintenance', 'Unknown'];
     if (status !== undefined && !allowedStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status value' });
     }
