@@ -636,52 +636,51 @@ class Modals {
             header.style.cssText = `
                 position:fixed; left:-9999px; top:0;
                 width:${document.querySelector('.main-content')?.offsetWidth || 1200}px;
-                padding:20px 28px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+                padding:20px 28px; display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:24px;
                 background:${headerBgColor}; border-bottom:2px solid ${borderColor}; box-sizing:border-box;
-                font-family:'Inter',sans-serif;
+                font-family:'Georgia','Times New Roman',serif;
             `;
             header.innerHTML = `
-                <div></div>
-                <div style="display:flex;flex-direction:column;align-items:stretch;gap:12px;">
-                    <div style="display:flex;align-items:center;justify-content:center;gap:14px;">
-                        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:50px;height:50px;border-radius:10px;flex-shrink:0;">
-                            <rect width="48" height="48" rx="12" fill="url(#expLogoGrad)"/>
-                            <polyline points="4,24 10,24 14,14 18,34 22,20 26,28 30,24 34,24 38,18 42,24 44,24"
-                                      stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                            <defs>
-                                <linearGradient id="expLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                                    <stop offset="0%" stop-color="#3b82f6"/>
-                                    <stop offset="100%" stop-color="#8b5cf6"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                        <div>
-                            <div style="font-size:1.4rem;font-weight:800;color:${textColor};line-height:1.2;">Bridges Pulse</div>
-                            <div style="font-size:1rem;font-weight:700;color:#6b7280;letter-spacing:0.03em;">Advanced Health Monitoring</div>
-                        </div>
-                    </div>
-                    <div style="display:flex;align-items:center;justify-content:space-evenly;gap:16px;padding:8px 20px;background:rgba(255,255,255,0.5);border:1px solid ${borderColor};border-radius:10px;">
+                <div style="display:flex;align-items:center;gap:14px;">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:46px;height:46px;border-radius:10px;flex-shrink:0;">
+                        <rect width="48" height="48" rx="12" fill="url(#expLogoGrad)"/>
+                        <polyline points="4,24 10,24 14,14 18,34 22,20 26,28 30,24 34,24 38,18 42,24 44,24"
+                                  stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <defs>
+                            <linearGradient id="expLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#3b82f6"/>
+                                <stop offset="100%" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div style="font-size:1.7rem;font-weight:700;color:${textColor};line-height:1.2;font-family:'Georgia',serif;letter-spacing:-0.01em;">Bridges Pulse</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                    <div style="display:inline-flex;flex-direction:column;align-items:stretch;gap:6px;">
+                        <div style="font-size:1.5rem;font-weight:700;color:${textColor};letter-spacing:0.18em;text-transform:uppercase;text-align:center;font-family:'Georgia','Times New Roman',serif;">Application Health Monitoring</div>
+                        <div style="display:flex;align-items:center;justify-content:center;gap:16px;padding:7px 24px;background:rgba(255,255,255,0.5);border:1px solid ${borderColor};border-radius:10px;">
                         <div style="display:flex;align-items:center;gap:7px;">
-                            <div style="width:10px;height:10px;border-radius:50%;background:#10b981;flex-shrink:0;"></div>
-                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${healthyCount}</span>
+                            <div style="width:9px;height:9px;border-radius:50%;background:#10b981;flex-shrink:0;"></div>
+                            <span style="font-size:0.95rem;font-weight:700;color:${textColor};">${healthyCount}</span>
                             <span style="font-size:0.75rem;color:#6b7280;">Healthy</span>
                         </div>
-                        <div style="width:1px;height:24px;background:${borderColor};"></div>
+                        <div style="width:1px;height:20px;background:${borderColor};"></div>
                         <div style="display:flex;align-items:center;gap:7px;">
-                            <div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div>
-                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${warningCount}</span>
+                            <div style="width:9px;height:9px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div>
+                            <span style="font-size:0.95rem;font-weight:700;color:${textColor};">${warningCount}</span>
                             <span style="font-size:0.75rem;color:#6b7280;">Warnings</span>
                         </div>
-                        <div style="width:1px;height:24px;background:${borderColor};"></div>
+                        <div style="width:1px;height:20px;background:${borderColor};"></div>
                         <div style="display:flex;align-items:center;gap:7px;">
-                            <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
-                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${criticalCount}</span>
+                            <div style="width:9px;height:9px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
+                            <span style="font-size:0.95rem;font-weight:700;color:${textColor};">${criticalCount}</span>
                             <span style="font-size:0.75rem;color:#6b7280;">Critical</span>
                         </div>
                     </div>
+                    </div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:1rem;font-weight:600;color:${textColor};">${exportTime}</div>
+                    <div style="font-size:1rem;font-weight:400;color:${textColor};font-family:'Inter','Segoe UI',sans-serif;letter-spacing:0.01em;">${exportTime}</div>
                 </div>
             `;
             document.body.appendChild(header);
