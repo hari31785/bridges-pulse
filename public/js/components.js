@@ -323,6 +323,10 @@ const componentStyles = `
     border-left: 4px solid var(--status-operational);
 }
 
+.service-card.unknown {
+    border-left: 4px solid #9ca3af;
+}
+
 .card-header {
     display: flex;
     align-items: center;
