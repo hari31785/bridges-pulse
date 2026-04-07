@@ -151,6 +151,13 @@ const Utils = {
     getResponseTimeClass(responseTime) {
         if (!responseTime || responseTime === 'NA') return 'response-na';
         
+        // Handle text-based response time values
+        const lower = responseTime.toLowerCase();
+        if (lower === 'excellent') return 'response-excellent';
+        if (lower === 'good')      return 'response-good';
+        if (lower === 'average')   return 'response-average';
+        if (lower === 'poor')      return 'response-poor';
+
         const value = parseFloat(responseTime);
         if (isNaN(value)) return 'response-na';
         

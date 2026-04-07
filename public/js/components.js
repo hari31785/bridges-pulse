@@ -344,13 +344,17 @@ const componentStyles = `
 
 .card-title {
     flex: 1;
+    min-width: 0;
 }
 
 .card-title h4 {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 2px 0;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
 }
 
 .priority {
@@ -578,7 +582,8 @@ const componentStyles = `
 .services-grid {
     display: grid;
     gap: var(--space-md);
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
+    justify-content: start;
 }
 
 /* ── Compact card tweaks ── */
@@ -613,13 +618,12 @@ const componentStyles = `
 ══════════════════════════════════════ */
 
 .col-view-column {
-    flex: 1 1 200px;
-    max-width: 280px;
     background: var(--bg-primary);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
     overflow: hidden;
     min-width: 0;
+    width: 100%;
 }
 
 .col-view-header {
@@ -683,7 +687,7 @@ const componentStyles = `
 
 .col-row-left {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-xs);
     min-width: 0;
 }
@@ -692,9 +696,9 @@ const componentStyles = `
     font-size: 0.8rem;
     font-weight: 500;
     color: var(--text-primary);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
 }
 
 .col-row-right {
@@ -725,9 +729,16 @@ const componentStyles = `
     color: var(--text-secondary);
     margin-top: 2px;
     padding-left: calc(10px + var(--space-xs));
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.3;
+}
+
+.col-row-rt {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    padding-left: calc(10px + var(--space-xs));
 }
 
 /* ══════════════════════════════════════

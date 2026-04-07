@@ -618,6 +618,7 @@ class Modals {
             if (filtersBar) filtersBar.style.display = 'none';
 
             const bgColor = getComputedStyle(document.body).getPropertyValue('--bg-primary').trim() || '#ffffff';
+            const pageBgColor = getComputedStyle(document.body).getPropertyValue('--bg-secondary').trim() || '#f0f9ff';
             const textColor = getComputedStyle(document.body).getPropertyValue('--text-primary').trim() || '#111827';
             const borderColor = getComputedStyle(document.body).getPropertyValue('--border-primary').trim() || '#e5e7eb';
             const accentColor = '#3b82f6';
@@ -627,62 +628,67 @@ class Modals {
             const warningCount = document.getElementById('warning-count')?.textContent || '0';
             const criticalCount = document.getElementById('critical-count')?.textContent || '0';
 
+            const isDark = document.body.classList.contains('theme-dark');
+            const headerBgColor = isDark ? '#1a3a52' : '#d0eafb';
+
             // Build export header
             const header = document.createElement('div');
             header.style.cssText = `
                 position:fixed; left:-9999px; top:0;
                 width:${document.querySelector('.main-content')?.offsetWidth || 1200}px;
                 padding:20px 28px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
-                background:${bgColor}; border-bottom:2px solid ${borderColor}; box-sizing:border-box;
+                background:${headerBgColor}; border-bottom:2px solid ${borderColor}; box-sizing:border-box;
                 font-family:'Inter',sans-serif;
             `;
             header.innerHTML = `
-                <div style="display:flex;align-items:center;gap:14px;">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:40px;height:40px;border-radius:10px;">
-                        <rect width="48" height="48" rx="12" fill="url(#expLogoGrad)"/>
-                        <polyline points="4,24 10,24 14,14 18,34 22,20 26,28 30,24 34,24 38,18 42,24 44,24"
-                                  stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                        <defs>
-                            <linearGradient id="expLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
-                                <stop offset="0%" stop-color="#3b82f6"/>
-                                <stop offset="100%" stop-color="#8b5cf6"/>
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                    <div>
-                        <div style="font-size:1.2rem;font-weight:700;color:${textColor};line-height:1.2;">Bridges Pulse</div>
-                        <div style="font-size:0.75rem;color:#6b7280;letter-spacing:0.03em;">Advanced Health Monitoring</div>
+                <div></div>
+                <div style="display:flex;flex-direction:column;align-items:stretch;gap:12px;">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:14px;">
+                        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:50px;height:50px;border-radius:10px;flex-shrink:0;">
+                            <rect width="48" height="48" rx="12" fill="url(#expLogoGrad)"/>
+                            <polyline points="4,24 10,24 14,14 18,34 22,20 26,28 30,24 34,24 38,18 42,24 44,24"
+                                      stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <defs>
+                                <linearGradient id="expLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#3b82f6"/>
+                                    <stop offset="100%" stop-color="#8b5cf6"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div>
+                            <div style="font-size:1.4rem;font-weight:800;color:${textColor};line-height:1.2;">Bridges Pulse</div>
+                            <div style="font-size:1rem;font-weight:700;color:#6b7280;letter-spacing:0.03em;">Advanced Health Monitoring</div>
+                        </div>
                     </div>
-                </div>
-                <div style="display:flex;align-items:center;gap:16px;padding:10px 20px;background:${bgColor};border:1px solid ${borderColor};border-radius:10px;">
-                    <div style="display:flex;align-items:center;gap:7px;">
-                        <div style="width:10px;height:10px;border-radius:50%;background:#10b981;flex-shrink:0;"></div>
-                        <span style="font-size:1rem;font-weight:700;color:${textColor};">${healthyCount}</span>
-                        <span style="font-size:0.75rem;color:#6b7280;">Healthy</span>
-                    </div>
-                    <div style="width:1px;height:24px;background:${borderColor};"></div>
-                    <div style="display:flex;align-items:center;gap:7px;">
-                        <div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div>
-                        <span style="font-size:1rem;font-weight:700;color:${textColor};">${warningCount}</span>
-                        <span style="font-size:0.75rem;color:#6b7280;">Warnings</span>
-                    </div>
-                    <div style="width:1px;height:24px;background:${borderColor};"></div>
-                    <div style="display:flex;align-items:center;gap:7px;">
-                        <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
-                        <span style="font-size:1rem;font-weight:700;color:${textColor};">${criticalCount}</span>
-                        <span style="font-size:0.75rem;color:#6b7280;">Critical</span>
+                    <div style="display:flex;align-items:center;justify-content:space-evenly;gap:16px;padding:8px 20px;background:rgba(255,255,255,0.5);border:1px solid ${borderColor};border-radius:10px;">
+                        <div style="display:flex;align-items:center;gap:7px;">
+                            <div style="width:10px;height:10px;border-radius:50%;background:#10b981;flex-shrink:0;"></div>
+                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${healthyCount}</span>
+                            <span style="font-size:0.75rem;color:#6b7280;">Healthy</span>
+                        </div>
+                        <div style="width:1px;height:24px;background:${borderColor};"></div>
+                        <div style="display:flex;align-items:center;gap:7px;">
+                            <div style="width:10px;height:10px;border-radius:50%;background:#fbbf24;flex-shrink:0;"></div>
+                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${warningCount}</span>
+                            <span style="font-size:0.75rem;color:#6b7280;">Warnings</span>
+                        </div>
+                        <div style="width:1px;height:24px;background:${borderColor};"></div>
+                        <div style="display:flex;align-items:center;gap:7px;">
+                            <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;flex-shrink:0;"></div>
+                            <span style="font-size:1rem;font-weight:700;color:${textColor};">${criticalCount}</span>
+                            <span style="font-size:0.75rem;color:#6b7280;">Critical</span>
+                        </div>
                     </div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:0.7rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Exported</div>
-                    <div style="font-size:0.85rem;font-weight:600;color:${textColor};">${exportTime}</div>
+                    <div style="font-size:1rem;font-weight:600;color:${textColor};">${exportTime}</div>
                 </div>
             `;
             document.body.appendChild(header);
 
             const [headerCanvas, bodyCanvas] = await Promise.all([
-                html2canvas(header, { scale: 2, useCORS: true, backgroundColor: bgColor }),
-                html2canvas(document.querySelector('.main-content') || document.body, { scale: 2, useCORS: true, backgroundColor: bgColor })
+                html2canvas(header, { scale: 2, useCORS: true, backgroundColor: headerBgColor }),
+                html2canvas(document.querySelector('.main-content') || document.body, { scale: 2, useCORS: true, backgroundColor: pageBgColor })
             ]);
 
             document.body.removeChild(header);

@@ -3,6 +3,14 @@
  * Handles rendering, filtering, searching, and layout of service data
  */
 
+const CATEGORY_EMOJI = {
+    application:     '🖥️',
+    database:        '🗄️',
+    integrations:    '🔌',
+    functionalities: '✨',
+    services:        '⚙️'
+};
+
 class Dashboard {
     constructor() {
         this.services = null;
@@ -147,8 +155,9 @@ class Dashboard {
             const catConfig = categoryConfig[category] || {};
             if (catConfig.visible === false) return;
 
+            const emoji = CATEGORY_EMOJI[category] || '';
             const section = Components.createCategorySection(category, services, {
-                title: catConfig.title || this.formatCategoryName(category),
+                title: (emoji ? emoji + ' ' : '') + (catConfig.title || this.formatCategoryName(category)),
                 color: catConfig.color || '#3b82f6',
                 icon: catConfig.icon || 'layers',
                 expanded: catConfig.expanded !== false
@@ -447,10 +456,11 @@ class Dashboard {
             const color = catConfig.color || '#3b82f6';
 
             // Split large categories into two columns (threshold: 15 items)
+            const half = Math.floor(services.length / 2);
             const chunks = services.length > 15
                 ? [
-                    { label: title, items: services.slice(0, Math.ceil(services.length / 2)) },
-                    { label: `${title} (Contd.)`, items: services.slice(Math.ceil(services.length / 2)) }
+                    { label: title, items: services.slice(0, half) },
+                    { label: `${title} (Contd.)`, items: services.slice(half) }
                   ]
                 : [{ label: title, items: services }];
 
@@ -459,9 +469,10 @@ class Dashboard {
                 col.className = 'col-view-column fade-in';
                 col.setAttribute('data-category', category);
 
+                const emoji = CATEGORY_EMOJI[category] || '';
                 col.innerHTML = `
                 <div class="col-view-header" style="border-top: 3px solid ${color}">
-                    <span class="col-view-title">${Utils.sanitizeHtml(label)}</span>
+                    <span class="col-view-title">${emoji ? emoji + ' ' : ''}${Utils.sanitizeHtml(label)}</span>
                     <span class="col-view-count">${items.length}</span>
                 </div>
                 <div class="col-view-body">
@@ -470,6 +481,8 @@ class Dashboard {
                         const dotClass = Utils.getDotClass(s.status);
                         const statusClass = Utils.getStatusClass(s.status);
                         const hasProblem = s.problemStatement && s.problemStatement.trim();
+                        const hasRT = s.responseTime && s.responseTime !== 'NA';
+                        const responseClass = hasRT ? Utils.getResponseTimeClass(s.responseTime) : '';
                         return `
                         <div class="col-view-row ${statusType}" data-service-id="${s.id}" data-category="${category}" data-status-type="${statusType}">
                             <div class="col-row-left">
@@ -480,6 +493,7 @@ class Dashboard {
                                 <span class="col-row-status ${statusClass}">${Utils.sanitizeHtml(s.status)}</span>
                                 ${hasProblem ? `<span class="col-row-alert" title="${Utils.sanitizeHtml(s.problemStatement)}"><i data-feather="alert-triangle"></i></span>` : ''}
                             </div>
+                            ${hasRT ? `<div class="col-row-rt">Response Time: <span class="${responseClass}">${Utils.sanitizeHtml(s.responseTime)}</span></div>` : ''}
                             ${hasProblem ? `<div class="col-row-problem">${Utils.sanitizeHtml(s.problemStatement)}</div>` : ''}
                         </div>`;
                     }).join('')}
@@ -489,6 +503,10 @@ class Dashboard {
                 dashboard.appendChild(col);
             });
         });
+
+        // Set equal-width columns based on actual column count
+        const colCount = dashboard.querySelectorAll('.col-view-column').length;
+        dashboard.style.gridTemplateColumns = `repeat(${colCount}, 1fr)`;
 
         if (window.feather) feather.replace();
     }
@@ -515,7 +533,8 @@ class Dashboard {
             const catConfig = categoryConfig[category] || {};
             if (catConfig.visible === false) return;
             const title = catConfig.title || this.formatCategoryName(category);
-            services.forEach(s => allServices.push({ ...s, _categoryTitle: title }));
+            const emoji = CATEGORY_EMOJI[category] || '';
+            services.forEach(s => allServices.push({ ...s, _categoryTitle: (emoji ? emoji + ' ' : '') + title }));
         });
 
         const wrapper = document.createElement('div');
