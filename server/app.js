@@ -43,7 +43,7 @@ app.use(helmet({
 app.use(compression());
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public'), { etag: false, maxAge: 0 }));
 
 // Health check — no DB needed, always responds
 app.get('/api/health', (req, res) => {

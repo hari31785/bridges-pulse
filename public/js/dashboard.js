@@ -483,8 +483,10 @@ class Dashboard {
                         const hasProblem = s.problemStatement && s.problemStatement.trim();
                         const hasRT = s.responseTime && s.responseTime !== 'NA';
                         const responseClass = hasRT ? Utils.getResponseTimeClass(s.responseTime) : '';
+                        const stripeColorMap = { healthy: '#10b981', warning: '#fbbf24', critical: '#dc2626', unknown: '#9ca3af' };
+                        const stripeColor = stripeColorMap[statusType] || '#9ca3af';
                         return `
-                        <div class="col-view-row ${statusType}" data-service-id="${s.id}" data-category="${category}" data-status-type="${statusType}">
+                        <div class="col-view-row ${statusType}" data-service-id="${s.id}" data-category="${category}" data-status-type="${statusType}" style="background:linear-gradient(to right, ${stripeColor} 0px, ${stripeColor} 3px, var(--bg-primary) 3px)">
                             <div class="col-row-left">
                                 <div class="status-dot ${dotClass}"></div>
                                 <span class="col-row-name">${Utils.sanitizeHtml(s.name)}</span>

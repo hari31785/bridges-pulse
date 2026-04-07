@@ -24,7 +24,11 @@ const Components = {
         cardElement.setAttribute('data-service-id', service.id);
         cardElement.setAttribute('data-category', service.category);
         cardElement.setAttribute('data-status-type', statusType);
-        
+
+        const stripeColorMap = { healthy: '#10b981', warning: '#fbbf24', critical: '#dc2626', unknown: '#9ca3af' };
+        const stripeColor = stripeColorMap[statusType] || '#9ca3af';
+        cardElement.style.background = `linear-gradient(to right, ${stripeColor} 0px, ${stripeColor} 3px, var(--bg-primary) 3px)`;
+
         cardElement.innerHTML = `
             <div class="card-header">
                 <div class="card-icon">
@@ -32,10 +36,10 @@ const Components = {
                 </div>
                 <div class="card-title">
                     <h4>${Utils.sanitizeHtml(service.name)}</h4>
-                </div>
-                <div class="card-status">
-                    <div class="status-dot ${dotClass}"></div>
-                    <span class="status-text ${statusClass}">${Utils.sanitizeHtml(service.status)}</span>
+                    <div class="card-status">
+                        <div class="status-dot ${dotClass}"></div>
+                        <span class="status-text ${statusClass}">${Utils.sanitizeHtml(service.status)}</span>
+                    </div>
                 </div>
             </div>
             
@@ -298,52 +302,44 @@ const componentStyles = `
     background: var(--bg-primary);
     border: 1px solid var(--border-primary);
     border-radius: var(--radius-lg);
-    padding: var(--space-lg);
+    padding: var(--space-md) var(--space-md) var(--space-md) var(--space-md);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .service-card:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
     border-color: var(--border-accent);
 }
 
-.service-card.critical {
-    border-left: 4px solid var(--status-critical);
-}
-
-.service-card.warning {
-    border-left: 4px solid var(--status-average);
-}
-
-.service-card.healthy {
-    border-left: 4px solid var(--status-operational);
-}
-
-.service-card.unknown {
-    border-left: 4px solid #9ca3af;
-}
+.service-card.critical { border-left: 5px solid #dc2626 !important; }
+.service-card.warning  { border-left: 5px solid #fbbf24 !important; }
+.service-card.healthy  { border-left: 5px solid #10b981 !important; }
+.service-card.unknown  { border-left: 5px solid #9ca3af !important; }
 
 .card-header {
     display: flex;
-    align-items: center;
-    gap: var(--space-md);
-    margin-bottom: var(--space-md);
+    align-items: flex-start;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
 }
 
 .card-icon {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     background: var(--bg-tertiary);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-secondary);
-    font-size: 18px;
+    font-size: 15px;
+    flex-shrink: 0;
 }
 
 .card-title {
@@ -352,10 +348,10 @@ const componentStyles = `
 }
 
 .card-title h4 {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin: 0 0 2px 0;
+    margin: 0;
     white-space: normal;
     word-break: break-word;
     line-height: 1.3;
@@ -378,16 +374,20 @@ const componentStyles = `
 .card-status {
     display: flex;
     align-items: center;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
 }
 
 .status-text {
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
 }
 
 .card-body {
-    margin-bottom: var(--space-md);
+    flex: 1;
+    margin-bottom: var(--space-sm);
 }
 
 .metric {
@@ -440,8 +440,9 @@ const componentStyles = `
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: var(--space-md);
+    padding-top: var(--space-sm);
     border-top: 1px solid var(--border-primary);
+    margin-top: auto;
 }
 
 .last-updated {
@@ -579,43 +580,17 @@ const componentStyles = `
     border: 1px solid var(--border-primary);
     border-top: none;
     border-radius: 0 0 var(--radius-lg) var(--radius-lg);
-    padding: var(--space-lg);
-    background: var(--bg-secondary);
+    padding: var(--space-md);
+    background: var(--bg-primary);
 }
 
 .services-grid {
     display: grid;
     gap: var(--space-md);
-    grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
-    justify-content: start;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
 /* ── Compact card tweaks ── */
-.service-card {
-    padding: var(--space-md);
-}
-
-.card-header {
-    margin-bottom: var(--space-sm);
-}
-
-.card-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-}
-
-.card-title h4 {
-    font-size: 0.875rem;
-}
-
-.card-body {
-    margin-bottom: var(--space-sm);
-}
-
-.card-footer {
-    padding-top: var(--space-sm);
-}
 
 /* ══════════════════════════════════════
    COLUMNS VIEW — layout handled in styles.css (.dashboard.layout-columns)
@@ -678,15 +653,12 @@ const componentStyles = `
 }
 
 .col-view-row.critical {
-    border-left: 3px solid var(--status-critical);
 }
 
 .col-view-row.warning {
-    border-left: 3px solid var(--status-average);
 }
 
 .col-view-row.healthy {
-    border-left: 3px solid transparent;
 }
 
 .col-row-left {
