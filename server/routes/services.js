@@ -176,7 +176,7 @@ function generateSummary(services) {
       if (status.includes('poor') || status.includes('error') || status.includes('critical') || status.includes('down')) {
         summary.critical++;
         summary.categories[category].issues++;
-      } else if (hasProblem || status.includes('average') || status.includes('warning') || status.includes('degraded') || status.includes('maintenance')) {
+      } else if (status.includes('average') || status.includes('warning') || status.includes('degraded') || status.includes('maintenance')) {
         summary.issues++;
         summary.categories[category].issues++;
       } else {
