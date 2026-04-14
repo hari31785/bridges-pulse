@@ -253,6 +253,16 @@
       "problemStatement": "",
       "lastUpdated": "2026-04-06T14:30:00.000Z",
       "category": "integrations"
+    },
+    {
+      "id": "birth_registry",
+      "name": "Birth Registry",
+      "icon": "book-open",
+      "status": "OK",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-14T00:00:00.000Z",
+      "category": "integrations"
     }
   ],
   "functionalities": [
