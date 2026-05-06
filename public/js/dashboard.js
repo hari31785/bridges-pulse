@@ -455,14 +455,26 @@ class Dashboard {
             const title = catConfig.title || this.formatCategoryName(category);
             const color = catConfig.color || '#3b82f6';
 
-            // Split large categories into two columns (threshold: 15 items)
-            const half = Math.floor(services.length / 2);
-            const chunks = services.length > 15
-                ? [
+            // Split large categories into multiple columns
+            // > 32 items → 3 columns; > 15 items → 2 columns; else → 1 column
+            let chunks;
+            if (services.length > 32) {
+                const a = Math.floor(services.length / 3);
+                const b = Math.floor((services.length - a) / 2);
+                chunks = [
+                    { label: title, items: services.slice(0, a) },
+                    { label: `${title} (Contd.)`, items: services.slice(a, a + b) },
+                    { label: `${title} (Contd.)`, items: services.slice(a + b) }
+                ];
+            } else if (services.length > 15) {
+                const half = Math.floor(services.length / 2);
+                chunks = [
                     { label: title, items: services.slice(0, half) },
                     { label: `${title} (Contd.)`, items: services.slice(half) }
-                  ]
-                : [{ label: title, items: services }];
+                ];
+            } else {
+                chunks = [{ label: title, items: services }];
+            }
 
             chunks.forEach(({ label, items }) => {
                 const col = document.createElement('div');

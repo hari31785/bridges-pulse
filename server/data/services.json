@@ -647,6 +647,186 @@
       "problemStatement": "this is the problem",
       "lastUpdated": "2026-04-06T14:30:00.000Z",
       "category": "services"
+    },
+    {
+      "id": "financial_service",
+      "name": "financial-service",
+      "icon": "dollar-sign",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "helm_deployment_chart",
+      "name": "helm-deployment-chart",
+      "icon": "anchor",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "ig_service",
+      "name": "ig-service",
+      "icon": "eye",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "image_files",
+      "name": "Image-Files",
+      "icon": "image",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "inbsi_service",
+      "name": "inbsi-service",
+      "icon": "activity",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "indvhohstatus_service",
+      "name": "indvhohstatus-service",
+      "icon": "home",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "indvinfo_service",
+      "name": "indvinfo-service",
+      "icon": "user",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "insight_service",
+      "name": "insight-service",
+      "icon": "bar-chart-2",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "insight_ui_service",
+      "name": "insight-ui-service",
+      "icon": "monitor",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "nemt_bridges_search_service",
+      "name": "nemt-bridges-search-service",
+      "icon": "search",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "reference_data_service",
+      "name": "reference-data-service",
+      "icon": "book",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "rulesengine_framework_service",
+      "name": "rulesEngine-framework-service",
+      "icon": "filter",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "shared_service",
+      "name": "shared-service",
+      "icon": "share-2",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "subsequent_processing_service",
+      "name": "subsequent-processing-service",
+      "icon": "fast-forward",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "trigger_correspondence_service",
+      "name": "trigger-correspondence-service",
+      "icon": "send",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "vcl_service",
+      "name": "vcl-service",
+      "icon": "code",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "viewbenefits_service",
+      "name": "viewbenefits-service",
+      "icon": "star",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
+    },
+    {
+      "id": "viewcorrespondence_service",
+      "name": "viewcorrespondence-service",
+      "icon": "mail",
+      "status": "Operational",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "category": "services"
     }
   ]
 }
