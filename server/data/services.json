@@ -659,16 +659,6 @@
       "category": "services"
     },
     {
-      "id": "helm_deployment_chart",
-      "name": "helm-deployment-chart",
-      "icon": "anchor",
-      "status": "Operational",
-      "responseTime": "NA",
-      "problemStatement": "",
-      "lastUpdated": "2026-05-05T00:00:00.000Z",
-      "category": "services"
-    },
-    {
       "id": "ig_service",
       "name": "ig-service",
       "icon": "eye",
@@ -679,13 +669,13 @@
       "category": "services"
     },
     {
-      "id": "image_files",
-      "name": "Image-Files",
-      "icon": "image",
+      "id": "ig_ui_service",
+      "name": "ig-ui-service",
+      "icon": "monitor",
       "status": "Operational",
       "responseTime": "NA",
       "problemStatement": "",
-      "lastUpdated": "2026-05-05T00:00:00.000Z",
+      "lastUpdated": "2026-05-06T00:00:00.000Z",
       "category": "services"
     },
     {
@@ -742,26 +732,6 @@
       "id": "nemt_bridges_search_service",
       "name": "nemt-bridges-search-service",
       "icon": "search",
-      "status": "Operational",
-      "responseTime": "NA",
-      "problemStatement": "",
-      "lastUpdated": "2026-05-05T00:00:00.000Z",
-      "category": "services"
-    },
-    {
-      "id": "reference_data_service",
-      "name": "reference-data-service",
-      "icon": "book",
-      "status": "Operational",
-      "responseTime": "NA",
-      "problemStatement": "",
-      "lastUpdated": "2026-05-05T00:00:00.000Z",
-      "category": "services"
-    },
-    {
-      "id": "rulesengine_framework_service",
-      "name": "rulesEngine-framework-service",
-      "icon": "filter",
       "status": "Operational",
       "responseTime": "NA",
       "problemStatement": "",
