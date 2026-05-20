@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridges Pulse — Deloitte Monthly Calendar Report</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/calendar.css">
+</head>
+<body class="theme-light">
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
+                        <rect width="48" height="48" rx="12" fill="url(#calLogoGrad)"/>
+                        <rect x="8" y="10" width="32" height="28" rx="3" stroke="white" stroke-width="2" fill="none"/>
+                        <line x1="8" y1="18" x2="40" y2="18" stroke="white" stroke-width="2"/>
+                        <line x1="16" y1="8" x2="16" y2="14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="32" y1="8" x2="32" y2="14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="calLogoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#2f5496"/>
+                                <stop offset="100%" stop-color="#4472c4"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>Monthly Calendar Report</h1>
+                    <p>Bridges Pulse — Deloitte Reporting</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="header-controls">
+                <a href="/" class="control-btn" title="Back to dashboard">
+                    <i data-feather="monitor"></i>
+                    <span>Dashboard</span>
+                </a>
+                <button id="theme-toggle" class="control-btn" title="Toggle theme">
+                    <i data-feather="sun" id="theme-icon"></i>
+                </button>
+            </div>
+            <div class="timestamp">
+                <i data-feather="clock"></i>
+                <span id="current-time"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="cal-main">
+
+        <!-- Setup Panel: Period + Key Dates -->
+        <div class="cal-setup-panel">
+
+            <!-- Period row -->
+            <div class="cal-setup-period">
+                <div class="cal-field-group">
+                    <label for="month-select">Month</label>
+                    <select id="month-select" class="cal-select">
+                        <option value="0">January</option>
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                        <option value="3">April</option>
+                        <option value="4">May</option>
+                        <option value="5" selected>June</option>
+                        <option value="6">July</option>
+                        <option value="7">August</option>
+                        <option value="8">September</option>
+                        <option value="9">October</option>
+                        <option value="10">November</option>
+                        <option value="11">December</option>
+                    </select>
+                </div>
+                <div class="cal-field-group">
+                    <label for="year-select">Year</label>
+                    <select id="year-select" class="cal-select">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Key Dates row (5 columns) -->
+            <div class="cal-setup-keydates">
+                <div class="cal-field-group">
+                    <label for="kd-negative-action">Negative Action Date</label>
+                    <input type="date" id="kd-negative-action" class="cal-date-input">
+                </div>
+                <div class="cal-field-group">
+                    <label for="kd-ma-cutoff">MA Card Cutoff Date</label>
+                    <input type="date" id="kd-ma-cutoff" class="cal-date-input">
+                </div>
+                <div class="cal-field-group">
+                    <label for="kd-bi-cutoff">BI Cutoff Date</label>
+                    <input type="date" id="kd-bi-cutoff" class="cal-date-input">
+                </div>
+                <div class="cal-field-group">
+                    <label for="kd-redet">Redet Schedule Date</label>
+                    <input type="date" id="kd-redet" class="cal-date-input">
+                </div>
+                <div class="cal-field-group">
+                    <label>Holidays</label>
+                    <div class="cal-form-holidays">
+                        <div class="holidays-input-row">
+                            <input type="date" id="holiday-date-input" class="cal-date-input">
+                            <button type="button" id="add-holiday-btn" class="btn-add-holiday" title="Add another holiday date">
+                                <i data-feather="plus"></i>
+                            </button>
+                        </div>
+                        <div id="holidays-chips" class="holidays-chips"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="cal-actions-bar">
+            <button id="generate-btn" class="btn-generate">
+                <i data-feather="calendar"></i>
+                Generate
+            </button>
+            <button id="export-image-btn" class="btn-export btn-export-img" title="Export as PNG image">
+                <i data-feather="image"></i>
+                Export as Image
+            </button>
+        </div>
+
+        <!-- Printable Calendar Area -->
+        <div class="cal-page-wrapper">
+            <div id="calendar-print-area" class="calendar-print-area">
+
+                <!-- Calendar Title -->
+                <div class="cal-report-title">
+                    <span class="cal-expand-icon">&#x229E;</span>
+                    <span class="cal-title-text" id="cal-title-text">Monthly Calendar &ndash; JUNE 2026</span>
+                </div>
+
+                <!-- Calendar Table -->
+                <table class="cal-table" id="cal-table">
+                    <thead>
+                        <tr>
+                            <th>Sunday</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cal-tbody">
+                        <!-- Rows injected by calendar.js -->
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="js/calendar.js"></script>
+</body>
+</html>

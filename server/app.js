@@ -80,6 +80,10 @@ app.get('/ops', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/ops.html'));
 });
 
+app.get('/calendar', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/calendar.html'));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });

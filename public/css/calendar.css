@@ -1,0 +1,501 @@
+/* ==============================================
+   Bridges Pulse — Deloitte Monthly Calendar
+   ============================================== */
+
+/* ── Main Layout ─────────────────────────────── */
+.cal-main {
+    padding: 1.5rem 2rem 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ── Setup Panel (Period + Key Dates) ────────── */
+.cal-setup-panel {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+/* Period row — top */
+.cal-setup-period {
+    display: flex;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 0.6rem 1.25rem;
+}
+
+/* Key Dates — 5 equal columns */
+.cal-setup-keydates {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--border-primary);
+}
+
+.cal-setup-keydates .cal-field-group {
+    padding: 0.6rem 0.9rem;
+    min-width: 0;
+}
+
+.cal-setup-keydates .cal-field-group + .cal-field-group {
+    border-left: 1px solid var(--border-primary);
+}
+
+.cal-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.cal-field-group label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cal-field-group .cal-select,
+.cal-field-group .cal-date-input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.cal-form-holidays {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.holidays-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+}
+
+.holidays-chips:empty {
+    display: none;
+}
+
+.cal-holiday-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    background: #2f5496;
+    color: #fff;
+    border-radius: 0.3rem;
+    padding: 0.18rem 0.45rem;
+    font-size: 0.74rem;
+    font-family: var(--font-body);
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.cal-chip-remove {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.9rem;
+    line-height: 1;
+    opacity: 0.75;
+    margin-left: 0.1rem;
+}
+
+.cal-chip-remove:hover {
+    opacity: 1;
+}
+
+.holidays-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 0;
+}
+
+/* ── Actions Bar ─────────────────────────────── */
+.cal-actions-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.75rem;
+}
+
+.cal-selector-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.cal-selector-group label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+.cal-select {
+    appearance: none;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 0.4rem;
+    padding: 0.45rem 2rem 0.45rem 0.75rem;
+    font-size: 0.9rem;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    min-width: 120px;
+}
+
+.cal-select:focus {
+    outline: none;
+    border-color: #2f5496;
+    box-shadow: 0 0 0 3px rgba(47, 84, 150, 0.15);
+}
+
+.btn-generate {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    background: #2f5496;
+    color: #fff;
+    border: none;
+    border-radius: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-generate:hover { background: #1f3d7a; }
+.btn-generate:active { transform: scale(0.97); }
+
+.btn-generate svg,
+.btn-export svg {
+    width: 15px;
+    height: 15px;
+}
+
+/* Export Buttons */
+.btn-export {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border: none;
+    border-radius: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.btn-export:active { transform: scale(0.97); }
+
+.btn-export-img {
+    background: #4472c4;
+    color: #fff;
+}
+.btn-export-img:hover { background: #2f5496; }
+
+.btn-export-pdf {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-secondary);
+}
+.btn-export-pdf:hover { background: var(--bg-tertiary); }
+
+/* ── Key Date Inputs ─────────────────────────── */
+.cal-date-input {
+    appearance: none;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 0.4rem;
+    padding: 0.42rem 0.55rem;
+    font-size: 0.82rem;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cal-date-input:focus {
+    outline: none;
+    border-color: #2f5496;
+    box-shadow: 0 0 0 3px rgba(47, 84, 150, 0.15);
+}
+
+.holidays-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.btn-add-holiday {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.42rem 0.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-secondary);
+    border-radius: 0.4rem;
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-add-holiday:hover {
+    background: var(--bg-tertiary);
+    border-color: #2f5496;
+    color: #2f5496;
+}
+
+.btn-add-holiday svg {
+    width: 13px;
+    height: 13px;
+}
+
+/* ── Page Wrapper ────────────────────────────── */
+.cal-page-wrapper {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    overflow-x: auto;
+}
+
+/* ── Print Area ──────────────────────────────── */
+.calendar-print-area {
+    font-family: 'Calibri', 'Inter', Arial, sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    width: 100%;
+}
+
+/* ── Report Title ────────────────────────────── */
+.cal-report-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.5rem;
+}
+
+.cal-expand-icon {
+    font-size: 1rem;
+    color: #1a1a1a;
+    line-height: 1;
+    flex-shrink: 0;
+    font-weight: 400;
+    font-family: 'Segoe UI Symbol', Arial, sans-serif;
+}
+
+.cal-title-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    font-variant: small-caps;
+    letter-spacing: 0.02em;
+    color: #1a1a1a;
+    font-family: 'Calibri', 'Georgia', serif;
+    line-height: 1.2;
+}
+
+/* ── Calendar Table ──────────────────────────── */
+.cal-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 1.5px solid #4472c4;
+    font-family: 'Calibri', Arial, sans-serif;
+    font-size: 0.82rem;
+}
+
+/* Header Row */
+.cal-table thead tr th {
+    background: #2f5496;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.55rem 0.4rem;
+    border: 1px solid #4472c4;
+    letter-spacing: 0.02em;
+    font-family: 'Calibri', Arial, sans-serif;
+}
+
+/* Body rows */
+.cal-table tbody tr {
+    background: transparent;
+}
+
+/* All body cells — base styles */
+.cal-table tbody td {
+    background: #c5d9f1;
+    border: 1px solid #4472c4;
+    vertical-align: top;
+    padding: 0.3rem 0.4rem 0.4rem;
+}
+
+/* ── Date row — narrow, just fits the day number */
+.cal-table tbody tr.cal-date-row td {
+    height: auto;
+    padding: 0.18rem 0.4rem;
+    vertical-align: middle;
+}
+
+/* Date cells — slightly darker */
+.cal-table tbody td.cal-has-date {
+    background: #8aadd8;
+}
+
+/* Empty cells in the date row match the date cell colour */
+.cal-table tbody tr.cal-date-row td.cal-empty {
+    background: #8aadd8;
+}
+
+/* ── Content row — taller, slightly lighter */
+.cal-table tbody tr.cal-content-row td {
+    height: 80px;
+    vertical-align: top;
+}
+
+.cal-table tbody td.cal-content-cell {
+    background: #c5d9f1;
+}
+
+/* Empty cells inherit base colour */
+.cal-table tbody td.cal-empty {
+    /* intentionally blank */
+}
+
+/* Day Number */
+.cal-day-num {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1a1a1a;
+    display: block;
+    margin-bottom: 0.15rem;
+    line-height: 1.2;
+    font-family: 'Calibri', Arial, sans-serif;
+}
+
+/* Event List */
+.cal-events {
+    list-style: disc;
+    padding-left: 1rem;
+    margin: 0;
+}
+
+.cal-events li {
+    font-size: 0.78rem;
+    color: #1a1a1a;
+    line-height: 1.35;
+    margin-bottom: 0.1rem;
+    font-family: 'Calibri', Arial, sans-serif;
+}
+
+/* ── Dark Theme Overrides ────────────────────── */
+.theme-dark .cal-page-wrapper {
+    background: var(--bg-secondary);
+    border-color: var(--border-primary);
+}
+
+/* The print area always stays light (matches export) */
+.theme-dark .calendar-print-area {
+    background: #ffffff;
+    color: #1a1a1a;
+}
+
+/* ── Header Controls (reuse from ops) ──────── */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.85rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.4rem;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-family: var(--font-body);
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.control-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--border-secondary);
+}
+
+.control-btn svg {
+    width: 15px;
+    height: 15px;
+}
+
+/* ── Print Media Query ───────────────────────── */
+@media print {
+    body * { visibility: hidden; }
+    .calendar-print-area,
+    .calendar-print-area * { visibility: visible; }
+    .calendar-print-area {
+        position: absolute;
+        left: 0; top: 0;
+        width: 100%;
+    }
+    .cal-controls-bar,
+    .header,
+    .cal-page-wrapper > *:not(.calendar-print-area) {
+        display: none !important;
+    }
+    .cal-table {
+        font-size: 0.75rem;
+    }
+}
+
+/* ── Responsive ──────────────────────────────── */
+@media (max-width: 768px) {
+    .cal-main { padding: 1rem; }
+    .cal-controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .cal-controls-left,
+    .cal-controls-right {
+        justify-content: flex-start;
+    }
+    .cal-page-wrapper { padding: 1rem; }
+    .cal-table { font-size: 0.68rem; }
+    .cal-table thead tr th { font-size: 0.72rem; padding: 0.35rem 0.2rem; }
+    .cal-table tbody td { height: 80px; min-height: 80px; padding: 0.2rem; }
+}
