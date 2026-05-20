@@ -291,14 +291,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function syncDateInputsToMonth() {
         const { year, month } = getSelected();
-        const lastDay = new Date(year, month + 1, 0).getDate();
-        const minVal  = `${year}-${zeroPad2(month + 1)}-01`;
-        const maxVal  = `${year}-${zeroPad2(month + 1)}-${zeroPad2(lastDay)}`;
+        const minVal = `${year}-${zeroPad2(month + 1)}-01`;
+        const maxVal = `${year}-${zeroPad2(month + 1)}-${zeroPad2(new Date(year, month + 1, 0).getDate())}`;
 
-        // Clear holiday chips from the previous month
+        // Clear holiday chips when month changes
         const chipsContainer = document.getElementById('holidays-chips');
         if (chipsContainer) chipsContainer.innerHTML = '';
 
+        // Clear any key date inputs that fall outside the new month
         [
             document.getElementById('kd-negative-action'),
             document.getElementById('kd-ma-cutoff'),
@@ -307,14 +307,28 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('holiday-date-input')
         ].forEach(function (inp) {
             if (!inp) return;
-            inp.min = minVal;
-            inp.max = maxVal;
-            // Clear any user-selected value outside the new month range
             if (inp.value && (inp.value < minVal || inp.value > maxVal)) {
                 inp.value = '';
             }
         });
     }
+
+    // Set min on mousedown so picker opens at selected month, remove after to keep mm/dd/yyyy placeholder
+    [
+        document.getElementById('kd-negative-action'),
+        document.getElementById('kd-ma-cutoff'),
+        document.getElementById('kd-bi-cutoff'),
+        document.getElementById('kd-redet'),
+        document.getElementById('holiday-date-input')
+    ].forEach(function (inp) {
+        if (!inp) return;
+        inp.addEventListener('mousedown', function () {
+            const { year, month } = getSelected();
+            inp.min = `${year}-${zeroPad2(month + 1)}-01`;
+        });
+        inp.addEventListener('change', function () { inp.removeAttribute('min'); });
+        inp.addEventListener('blur',   function () { inp.removeAttribute('min'); });
+    });
 
     // Initial render
     const init = getSelected();
@@ -395,7 +409,90 @@ document.addEventListener('DOMContentLoaded', function () {
     const kdOpenBtn   = document.getElementById('key-dates-help-btn');
     const kdCloseBtn  = document.getElementById('key-dates-modal-close');
 
-    function openKdModal()  { if (kdModal) { kdModal.hidden = false; if (window.feather) feather.replace(); } }
+    function buildKdQueries() {
+        const { year, month } = getSelected();
+        const lastDay  = new Date(year, month + 1, 0).getDate();
+        const startStr = `${zeroPad2(month + 1)}/01/${year}`;
+        const endStr   = `${zeroPad2(month + 1)}/${zeroPad2(lastDay)}/${year}`;
+        const monthName = new Date(year, month, 1).toLocaleDateString('en-US', { month: 'long' });
+
+        const periodLabel = document.getElementById('kdhelp-period-label');
+        if (periodLabel) periodLabel.textContent = `${monthName} ${year}`;
+
+        const allDates = document.getElementById('q-all-keydates');
+        if (allDates) {
+            allDates.textContent =
+`SET SERVEROUTPUT ON;
+
+DECLARE
+    v_start_date DATE := TO_DATE('${startStr}', 'MM/DD/YYYY');
+    v_end_date   DATE := TO_DATE('${endStr}',   'MM/DD/YYYY');
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('--- Negative Action Date ---');
+
+    FOR r IN (
+        SELECT NEGACTIONDATE AS result_value
+        FROM rt_ednegactiondate_mv
+        WHERE TO_DATE(TRIM(NEGACTIONDATE), 'YYYY-MM-DD') >= v_start_date
+          AND TO_DATE(TRIM(NEGACTIONDATE), 'YYYY-MM-DD') <  v_end_date + 1
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE(r.result_value);
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || '--- MA Card Cutoff Date ---');
+
+    FOR r IN (
+        SELECT MACUTOFFDATE AS result_value
+        FROM rt_EDMACARDCUTOFF_mv
+        WHERE TO_DATE(TRIM(MACUTOFFDATE), 'YYYY-MM-DD') >= v_start_date
+          AND TO_DATE(TRIM(MACUTOFFDATE), 'YYYY-MM-DD') <  v_end_date + 1
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE(r.result_value);
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || '--- BI Cutoff Date ---');
+
+    FOR r IN (
+        SELECT DESCRIPTION AS result_value
+        FROM RT_BICUTOFFDATE_MV
+        WHERE TO_DATE(TRIM(DESCRIPTION), 'MM/DD/YYYY') >= v_start_date
+          AND TO_DATE(TRIM(DESCRIPTION), 'MM/DD/YYYY') <  v_end_date + 1
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE(r.result_value);
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || '--- Redet Schedule Date ---');
+
+    FOR r IN (
+        SELECT DESCRIPTION AS result_value
+        FROM RT_REDETSCHEDULE_MV
+        WHERE TO_DATE(TRIM(DESCRIPTION), 'MM/DD/YYYY') >= v_start_date
+          AND TO_DATE(TRIM(DESCRIPTION), 'MM/DD/YYYY') <  v_end_date + 1
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE(r.result_value);
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(CHR(10) || '--- Holiday Dates ---');
+
+    FOR r IN (
+        SELECT CODE AS result_value
+        FROM RT_HOLIDAY_MV
+        WHERE TO_DATE(TRIM(CODE), 'MM/DD/YYYY') >= v_start_date
+          AND TO_DATE(TRIM(CODE), 'MM/DD/YYYY') <  v_end_date + 1
+    ) LOOP
+        DBMS_OUTPUT.PUT_LINE(r.result_value);
+    END LOOP;
+END;
+/`;
+        }
+    }
+
+    function openKdModal()  {
+        if (!kdModal) return;
+        buildKdQueries();
+        kdModal.hidden = false;
+        if (window.feather) feather.replace();
+    }
     function closeKdModal() { if (kdModal) kdModal.hidden = true; }
 
     if (kdOpenBtn)  kdOpenBtn.addEventListener('click', openKdModal);

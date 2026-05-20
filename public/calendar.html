@@ -135,11 +135,11 @@
 
         <!-- Action Buttons -->
         <div class="cal-actions-bar">
-            <button id="generate-btn" class="btn-generate">
+            <button id="generate-btn" class="btn-generate" title="Enter key dates above, then click Generate to build the calendar">
                 <i data-feather="calendar"></i>
                 Generate
             </button>
-            <button id="export-image-btn" class="btn-export btn-export-img" title="Export as PNG image">
+            <button id="export-image-btn" class="btn-export btn-export-img" title="Export the generated calendar as a PNG image">
                 <i data-feather="image"></i>
                 Export as Image
             </button>
@@ -188,60 +188,16 @@
                 </div>
                 <button class="kdhelp-close" id="key-dates-modal-close" aria-label="Close">&times;</button>
             </div>
-            <p class="kdhelp-intro">Run the following queries against your database to retrieve the key dates needed for the calendar report.</p>
+            <p class="kdhelp-intro">Run the script below in SQL Developer (or your Oracle client) to retrieve all key dates for the selected month. The date range is automatically set based on your period selection.</p>
             <div class="kdhelp-queries">
 
                 <div class="kdhelp-query-block">
                     <div class="kdhelp-query-label">
-                        <i data-feather="alert-circle"></i>
-                        Negative Action Date
+                        <i data-feather="database"></i>
+                        All Key Dates — <span id="kdhelp-period-label"></span>
                     </div>
-                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
-                    <button class="kdhelp-copy-btn" data-target="q-negative-action" title="Copy query">
-                        <i data-feather="copy"></i> Copy
-                    </button>
-                </div>
-
-                <div class="kdhelp-query-block">
-                    <div class="kdhelp-query-label">
-                        <i data-feather="credit-card"></i>
-                        MA Card Cutoff Date
-                    </div>
-                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
-                    <button class="kdhelp-copy-btn" data-target="q-ma-cutoff" title="Copy query">
-                        <i data-feather="copy"></i> Copy
-                    </button>
-                </div>
-
-                <div class="kdhelp-query-block">
-                    <div class="kdhelp-query-label">
-                        <i data-feather="bar-chart-2"></i>
-                        BI Cutoff Date
-                    </div>
-                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
-                    <button class="kdhelp-copy-btn" data-target="q-bi-cutoff" title="Copy query">
-                        <i data-feather="copy"></i> Copy
-                    </button>
-                </div>
-
-                <div class="kdhelp-query-block">
-                    <div class="kdhelp-query-label">
-                        <i data-feather="calendar"></i>
-                        Redet Schedule Date
-                    </div>
-                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
-                    <button class="kdhelp-copy-btn" data-target="q-redet" title="Copy query">
-                        <i data-feather="copy"></i> Copy
-                    </button>
-                </div>
-
-                <div class="kdhelp-query-block">
-                    <div class="kdhelp-query-label">
-                        <i data-feather="sun"></i>
-                        Holiday Dates
-                    </div>
-                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
-                    <button class="kdhelp-copy-btn" data-target="q-holidays" title="Copy query">
+                    <pre class="kdhelp-query-code"><code id="q-all-keydates">-- Loading...</code></pre>
+                    <button class="kdhelp-copy-btn" data-target="q-all-keydates" title="Copy script">
                         <i data-feather="copy"></i> Copy
                     </button>
                 </div>
