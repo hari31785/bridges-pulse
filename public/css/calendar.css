@@ -130,6 +130,177 @@
     margin-bottom: 1.75rem;
 }
 
+/* ── How to get key dates button ────────────── */
+.btn-key-dates-help {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.42rem 0.85rem;
+    background: transparent;
+    border: 1px solid var(--border-secondary);
+    border-radius: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    font-family: var(--font-body);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    margin-left: auto;
+}
+.btn-key-dates-help:hover {
+    background: var(--bg-tertiary);
+    border-color: #2f5496;
+    color: #2f5496;
+}
+.btn-key-dates-help svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* ── Key Dates Help Modal ───────────────────── */
+.kdhelp-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+.kdhelp-overlay[hidden] {
+    display: none;
+}
+.kdhelp-dialog {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-width: 680px;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.kdhelp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--border-primary);
+    flex-shrink: 0;
+}
+.kdhelp-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+.kdhelp-title-row svg {
+    width: 18px;
+    height: 18px;
+    color: #2f5496;
+}
+.kdhelp-title-row h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-primary);
+}
+.kdhelp-close {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.15rem 0.4rem;
+    border-radius: 0.3rem;
+    transition: background 0.15s, color 0.15s;
+}
+.kdhelp-close:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+.kdhelp-intro {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    padding: 0.45rem 1rem 0;
+    margin: 0;
+    flex-shrink: 0;
+}
+.kdhelp-queries {
+    padding: 0.45rem 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+.kdhelp-query-block {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.4rem;
+    padding: 0.45rem 0.75rem;
+    position: relative;
+}
+.kdhelp-query-label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #2f5496;
+    margin-bottom: 0.3rem;
+}
+.kdhelp-query-label svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+.kdhelp-query-code {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.3rem;
+    padding: 0.35rem 0.65rem;
+    margin: 0 0 0.35rem;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.75rem;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+}
+.kdhelp-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.55rem;
+    background: transparent;
+    border: 1px solid var(--border-secondary);
+    border-radius: 0.3rem;
+    font-size: 0.72rem;
+    font-family: var(--font-body);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.kdhelp-copy-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: #2f5496;
+    color: #2f5496;
+}
+.kdhelp-copy-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
 .cal-selector-group {
     display: flex;
     flex-direction: column;

@@ -93,6 +93,10 @@
                         <!-- Populated by JS -->
                     </select>
                 </div>
+                <button type="button" id="key-dates-help-btn" class="btn-key-dates-help" title="How to get key dates">
+                    <i data-feather="help-circle"></i>
+                    <span>How to get key dates</span>
+                </button>
             </div>
 
             <!-- Key Dates row (5 columns) -->
@@ -173,6 +177,78 @@
         </div>
 
     </main>
+
+    <!-- Key Dates Help Modal -->
+    <div id="key-dates-modal" class="kdhelp-overlay" role="dialog" aria-modal="true" aria-labelledby="kdhelp-title" hidden>
+        <div class="kdhelp-dialog">
+            <div class="kdhelp-header">
+                <div class="kdhelp-title-row">
+                    <i data-feather="database"></i>
+                    <h2 id="kdhelp-title">How to Get Key Dates</h2>
+                </div>
+                <button class="kdhelp-close" id="key-dates-modal-close" aria-label="Close">&times;</button>
+            </div>
+            <p class="kdhelp-intro">Run the following queries against your database to retrieve the key dates needed for the calendar report.</p>
+            <div class="kdhelp-queries">
+
+                <div class="kdhelp-query-block">
+                    <div class="kdhelp-query-label">
+                        <i data-feather="alert-circle"></i>
+                        Negative Action Date
+                    </div>
+                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
+                    <button class="kdhelp-copy-btn" data-target="q-negative-action" title="Copy query">
+                        <i data-feather="copy"></i> Copy
+                    </button>
+                </div>
+
+                <div class="kdhelp-query-block">
+                    <div class="kdhelp-query-label">
+                        <i data-feather="credit-card"></i>
+                        MA Card Cutoff Date
+                    </div>
+                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
+                    <button class="kdhelp-copy-btn" data-target="q-ma-cutoff" title="Copy query">
+                        <i data-feather="copy"></i> Copy
+                    </button>
+                </div>
+
+                <div class="kdhelp-query-block">
+                    <div class="kdhelp-query-label">
+                        <i data-feather="bar-chart-2"></i>
+                        BI Cutoff Date
+                    </div>
+                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
+                    <button class="kdhelp-copy-btn" data-target="q-bi-cutoff" title="Copy query">
+                        <i data-feather="copy"></i> Copy
+                    </button>
+                </div>
+
+                <div class="kdhelp-query-block">
+                    <div class="kdhelp-query-label">
+                        <i data-feather="calendar"></i>
+                        Redet Schedule Date
+                    </div>
+                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
+                    <button class="kdhelp-copy-btn" data-target="q-redet" title="Copy query">
+                        <i data-feather="copy"></i> Copy
+                    </button>
+                </div>
+
+                <div class="kdhelp-query-block">
+                    <div class="kdhelp-query-label">
+                        <i data-feather="sun"></i>
+                        Holiday Dates
+                    </div>
+                    <pre class="kdhelp-query-code"><code>-- Query coming soon</code></pre>
+                    <button class="kdhelp-copy-btn" data-target="q-holidays" title="Copy query">
+                        <i data-feather="copy"></i> Copy
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.js"></script>

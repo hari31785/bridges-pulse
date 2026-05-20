@@ -390,6 +390,41 @@ document.addEventListener('DOMContentLoaded', function () {
     // Theme
     initThemeToggle();
 
+    // Key Dates Help Modal
+    const kdModal     = document.getElementById('key-dates-modal');
+    const kdOpenBtn   = document.getElementById('key-dates-help-btn');
+    const kdCloseBtn  = document.getElementById('key-dates-modal-close');
+
+    function openKdModal()  { if (kdModal) { kdModal.hidden = false; if (window.feather) feather.replace(); } }
+    function closeKdModal() { if (kdModal) kdModal.hidden = true; }
+
+    if (kdOpenBtn)  kdOpenBtn.addEventListener('click', openKdModal);
+    if (kdCloseBtn) kdCloseBtn.addEventListener('click', closeKdModal);
+
+    if (kdModal) {
+        kdModal.addEventListener('click', function (e) {
+            if (e.target === kdModal) closeKdModal();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !kdModal.hidden) closeKdModal();
+        });
+
+        // Copy buttons
+        kdModal.addEventListener('click', function (e) {
+            const btn = e.target.closest('.kdhelp-copy-btn');
+            if (!btn) return;
+            const block = btn.closest('.kdhelp-query-block');
+            const code  = block ? block.querySelector('code') : null;
+            if (!code) return;
+            navigator.clipboard.writeText(code.textContent.trim()).then(function () {
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i data-feather="check"></i> Copied!';
+                if (window.feather) feather.replace();
+                setTimeout(function () { btn.innerHTML = orig; if (window.feather) feather.replace(); }, 2000);
+            });
+        });
+    }
+
     // Init icons
     if (window.feather) feather.replace();
 });
