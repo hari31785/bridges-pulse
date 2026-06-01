@@ -466,7 +466,7 @@ class Dashboard {
                     { label: `${title} (Contd.)`, items: services.slice(a, a + b) },
                     { label: `${title} (Contd.)`, items: services.slice(a + b) }
                 ];
-            } else if (services.length > 15) {
+            } else if (services.length > 20) {
                 const half = Math.floor(services.length / 2);
                 chunks = [
                     { label: title, items: services.slice(0, half) },

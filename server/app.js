@@ -10,6 +10,7 @@ const servicesRouter = require('./routes/services');
 const reportsRouter = require('./routes/reports');
 const configRouter = require('./routes/config');
 const opsRouter = require('./routes/ops');
+const externalRouter = require('./routes/external');
 const initDB = require('./db-init');
 
 // Logger setup
@@ -74,6 +75,7 @@ app.use('/api/services', servicesRouter);
 app.use('/api/reports', reportsRouter);
 app.use('/api/config', configRouter);
 app.use('/api/ops', opsRouter);
+app.use('/api/external', externalRouter);
 
 // Serve frontend
 app.get('/ops', (req, res) => {

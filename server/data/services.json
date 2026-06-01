@@ -135,16 +135,6 @@
   ],
   "integrations": [
     {
-      "id": "solq",
-      "name": "SOLQ",
-      "icon": "code",
-      "status": "OK",
-      "responseTime": "NA",
-      "problemStatement": "",
-      "lastUpdated": "2026-04-06T14:30:00.000Z",
-      "category": "integrations"
-    },
-    {
       "id": "ssa",
       "name": "SSA",
       "icon": "shield",
@@ -263,6 +253,46 @@
       "problemStatement": "",
       "lastUpdated": "2026-04-14T00:00:00.000Z",
       "category": "integrations"
+    },
+    {
+      "id": "account_transfer",
+      "name": "Account Transfer",
+      "icon": "repeat",
+      "status": "Running Normally",
+      "responseTime": "Average",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-06T14:30:00.000Z",
+      "category": "integrations"
+    },
+    {
+      "id": "address_validation",
+      "name": "Address Validation",
+      "icon": "map-pin",
+      "status": "Running Normally",
+      "responseTime": "Excellent",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-06T14:30:00.000Z",
+      "category": "integrations"
+    },
+    {
+      "id": "azure_upload",
+      "name": "Azure Upload",
+      "icon": "upload-cloud",
+      "status": "Running Normally",
+      "responseTime": "Excellent",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-06T14:29:00.000Z",
+      "category": "integrations"
+    },
+    {
+      "id": "azure_download",
+      "name": "Azure Download",
+      "icon": "download-cloud",
+      "status": "Running Normally",
+      "responseTime": "Excellent",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-06T14:29:00.000Z",
+      "category": "integrations"
     }
   ],
   "functionalities": [
@@ -307,11 +337,11 @@
       "category": "functionalities"
     },
     {
-      "id": "address_validation",
-      "name": "Address Validation",
-      "icon": "map-pin",
-      "status": "Running Normally",
-      "responseTime": "Excellent",
+      "id": "solq",
+      "name": "SOLQ",
+      "icon": "code",
+      "status": "OK",
+      "responseTime": "NA",
       "problemStatement": "",
       "lastUpdated": "2026-04-06T14:30:00.000Z",
       "category": "functionalities"
@@ -324,36 +354,6 @@
       "responseTime": "Average",
       "problemStatement": "3 -  400 http response code from Tango Service",
       "lastUpdated": "2026-04-06T14:22:00.000Z",
-      "category": "functionalities"
-    },
-    {
-      "id": "account_transfer",
-      "name": "Account Transfer",
-      "icon": "repeat",
-      "status": "Running Normally",
-      "responseTime": "Average",
-      "problemStatement": "",
-      "lastUpdated": "2026-04-06T14:30:00.000Z",
-      "category": "functionalities"
-    },
-    {
-      "id": "azure_upload",
-      "name": "Azure Upload",
-      "icon": "upload-cloud",
-      "status": "Running Normally",
-      "responseTime": "Excellent",
-      "problemStatement": "",
-      "lastUpdated": "2026-04-06T14:29:00.000Z",
-      "category": "functionalities"
-    },
-    {
-      "id": "azure_download",
-      "name": "Azure Download",
-      "icon": "download-cloud",
-      "status": "Running Normally",
-      "responseTime": "Excellent",
-      "problemStatement": "",
-      "lastUpdated": "2026-04-06T14:29:00.000Z",
       "category": "functionalities"
     }
   ],
