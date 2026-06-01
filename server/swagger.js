@@ -1,5 +1,3 @@
-const swaggerUi = require('swagger-ui-express');
-
 const spec = {
   openapi: '3.0.0',
   info: {
@@ -165,4 +163,4 @@ const spec = {
   }
 };
 
-module.exports = { swaggerUi, spec };
+module.exports = { spec };

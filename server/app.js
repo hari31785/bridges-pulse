@@ -11,8 +11,7 @@ const reportsRouter = require('./routes/reports');
 const configRouter = require('./routes/config');
 const opsRouter = require('./routes/ops');
 const externalRouter = require('./routes/external');
-const { swaggerUi, spec } = require('./swagger');
-const initDB = require('./db-init');
+const { spec } = require('./swagger');const initDB = require('./db-init');
 
 // Logger setup
 const logTransports = [new winston.transports.Console({ format: winston.format.simple() })];
@@ -34,9 +33,9 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net", "https://unpkg.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
+      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://unpkg.com", "'unsafe-inline'"],
       workerSrc: ["'self'", "blob:"],
       imgSrc: ["'self'", "data:", "https:"]
     }
@@ -78,7 +77,34 @@ app.use('/api/reports', reportsRouter);
 app.use('/api/config', configRouter);
 app.use('/api/ops', opsRouter);
 app.use('/api/external', externalRouter);
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(spec, { customSiteTitle: 'Bridges Pulse API Docs' }));
+
+// Swagger UI — spec served as JSON, UI loaded from CDN (works on Vercel)
+app.get('/api/docs/openapi.json', (req, res) => res.json(spec));
+app.get('/api/docs', (req, res) => {
+  const specUrl = `${req.protocol}://${req.get('host')}/api/docs/openapi.json`;
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Bridges Pulse API Docs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+<script>
+  SwaggerUIBundle({
+    url: '${specUrl}',
+    dom_id: '#swagger-ui',
+    presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+    layout: 'BaseLayout',
+    deepLinking: true
+  });
+</script>
+</body>
+</html>`);
+});
 
 // Serve frontend
 app.get('/ops', (req, res) => {
