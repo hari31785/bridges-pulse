@@ -81,7 +81,6 @@ app.use('/api/external', externalRouter);
 // Swagger UI — spec served as JSON, UI loaded from CDN (works on Vercel)
 app.get('/api/docs/openapi.json', (req, res) => res.json(spec));
 app.get('/api/docs', (req, res) => {
-  const specUrl = `${req.protocol}://${req.get('host')}/api/docs/openapi.json`;
   res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,7 +94,7 @@ app.get('/api/docs', (req, res) => {
 <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
 <script>
   SwaggerUIBundle({
-    url: '${specUrl}',
+    url: '/api/docs/openapi.json',
     dom_id: '#swagger-ui',
     presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
     layout: 'BaseLayout',
