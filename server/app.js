@@ -11,6 +11,7 @@ const reportsRouter = require('./routes/reports');
 const configRouter = require('./routes/config');
 const opsRouter = require('./routes/ops');
 const externalRouter = require('./routes/external');
+const { swaggerUi, spec } = require('./swagger');
 const initDB = require('./db-init');
 
 // Logger setup
@@ -35,7 +36,8 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.jsdelivr.net"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      scriptSrc: ["'self'", "https://cdn.jsdelivr.net"],
+      scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
+      workerSrc: ["'self'", "blob:"],
       imgSrc: ["'self'", "data:", "https:"]
     }
   }
@@ -76,6 +78,7 @@ app.use('/api/reports', reportsRouter);
 app.use('/api/config', configRouter);
 app.use('/api/ops', opsRouter);
 app.use('/api/external', externalRouter);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(spec, { customSiteTitle: 'Bridges Pulse API Docs' }));
 
 // Serve frontend
 app.get('/ops', (req, res) => {
