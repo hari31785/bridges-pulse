@@ -160,22 +160,18 @@ async function initDB() {
   // Move IBM Content Navigator to Application Layer
   await db.query("UPDATE services SET category = 'application' WHERE id = 'ibm_content_nav' AND category = 'integrations'");
 
-  // Split IBM FileNet into 02 and 03
-  const { rows: filenetRows } = await db.query("SELECT status, response_time, problem_statement FROM services WHERE id = 'ibm_filenet'");
-  if (filenetRows.length > 0) {
-    const r = filenetRows[0];
-    await db.query("DELETE FROM services WHERE id = 'ibm_filenet'");
-    await db.query(
-      `INSERT INTO services (id, name, icon, status, response_time, problem_statement, last_updated, category)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7) ON CONFLICT (id) DO NOTHING`,
-      ['ibm_filenet_02', 'IBM FileNet 02', 'folder', r.status, r.response_time, r.problem_statement, 'integrations']
-    );
-    await db.query(
-      `INSERT INTO services (id, name, icon, status, response_time, problem_statement, last_updated, category)
-       VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7) ON CONFLICT (id) DO NOTHING`,
-      ['ibm_filenet_03', 'IBM FileNet 03', 'folder', r.status, r.response_time, r.problem_statement, 'integrations']
-    );
-  }
+  // Split IBM FileNet into 02 and 03 — always ensure both exist
+  await db.query("DELETE FROM services WHERE id = 'ibm_filenet'");
+  await db.query(
+    `INSERT INTO services (id, name, icon, status, response_time, problem_statement, last_updated, category)
+     VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7) ON CONFLICT (id) DO NOTHING`,
+    ['ibm_filenet_02', 'IBM FileNet 02', 'folder', 'Running Normally', 'NA', '', 'integrations']
+  );
+  await db.query(
+    `INSERT INTO services (id, name, icon, status, response_time, problem_statement, last_updated, category)
+     VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7) ON CONFLICT (id) DO NOTHING`,
+    ['ibm_filenet_03', 'IBM FileNet 03', 'folder', 'Running Normally', 'NA', '', 'integrations']
+  );
 
   console.log('Database initialized successfully');
 }
