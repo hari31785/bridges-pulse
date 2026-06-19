@@ -89,6 +89,26 @@
       "problemStatement": "",
       "lastUpdated": "2026-04-06T14:30:00.000Z",
       "category": "application"
+    },
+    {
+      "id": "ibm_mq",
+      "name": "IBM MQ",
+      "icon": "message-square",
+      "status": "Running Normally",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-06T14:30:00.000Z",
+      "category": "application"
+    },
+    {
+      "id": "ibm_content_nav",
+      "name": "IBM Content Navigator",
+      "icon": "compass",
+      "status": "OK",
+      "responseTime": "NA",
+      "problemStatement": "0106 and 0205 needs a bounce",
+      "lastUpdated": "2026-04-06T14:15:00.000Z",
+      "category": "application"
     }
   ],
   "database": [
@@ -155,8 +175,8 @@
       "category": "integrations"
     },
     {
-      "id": "ibm_filenet",
-      "name": "IBM FileNet",
+      "id": "ibm_filenet_02",
+      "name": "IBM FileNet 02",
       "icon": "folder",
       "status": "Running Normally",
       "responseTime": "NA",
@@ -165,13 +185,13 @@
       "category": "integrations"
     },
     {
-      "id": "ibm_content_nav",
-      "name": "IBM Content Navigator",
-      "icon": "compass",
-      "status": "OK",
+      "id": "ibm_filenet_03",
+      "name": "IBM FileNet 03",
+      "icon": "folder",
+      "status": "Running Normally",
       "responseTime": "NA",
-      "problemStatement": "0106 and 0205 needs a bounce",
-      "lastUpdated": "2026-04-06T14:15:00.000Z",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-06T14:30:00.000Z",
       "category": "integrations"
     },
     {
@@ -192,16 +212,6 @@
       "responseTime": "NA",
       "problemStatement": "",
       "lastUpdated": "2026-04-07T00:00:00.000Z",
-      "category": "integrations"
-    },
-    {
-      "id": "ibm_mq",
-      "name": "IBM MQ",
-      "icon": "message-square",
-      "status": "Running Normally",
-      "responseTime": "NA",
-      "problemStatement": "",
-      "lastUpdated": "2026-04-06T14:30:00.000Z",
       "category": "integrations"
     },
     {
@@ -232,26 +242,6 @@
       "responseTime": "NA",
       "problemStatement": "",
       "lastUpdated": "2026-04-06T14:30:00.000Z",
-      "category": "integrations"
-    },
-    {
-      "id": "azure",
-      "name": "Azure",
-      "icon": "cloud",
-      "status": "OK",
-      "responseTime": "NA",
-      "problemStatement": "",
-      "lastUpdated": "2026-04-06T14:30:00.000Z",
-      "category": "integrations"
-    },
-    {
-      "id": "birth_registry",
-      "name": "Birth Registry",
-      "icon": "book-open",
-      "status": "OK",
-      "responseTime": "NA",
-      "problemStatement": "",
-      "lastUpdated": "2026-04-14T00:00:00.000Z",
       "category": "integrations"
     },
     {
@@ -354,6 +344,16 @@
       "responseTime": "Average",
       "problemStatement": "3 -  400 http response code from Tango Service",
       "lastUpdated": "2026-04-06T14:22:00.000Z",
+      "category": "functionalities"
+    },
+    {
+      "id": "birth_registry",
+      "name": "Birth Registry",
+      "icon": "book-open",
+      "status": "OK",
+      "responseTime": "NA",
+      "problemStatement": "",
+      "lastUpdated": "2026-04-14T00:00:00.000Z",
       "category": "functionalities"
     }
   ],
